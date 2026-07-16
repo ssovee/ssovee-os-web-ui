@@ -26,11 +26,16 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./tailwind-preset": "./tailwind-preset.js",
+    "./theme.css": "./theme.css"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "tailwind-preset.js",
+    "theme.css"
   ],
   "scripts": {
     "build": "tsup",
@@ -43,7 +48,8 @@
   },
   "peerDependencies": {
     "react": ">=18",
-    "react-dom": ">=18"
+    "react-dom": ">=18",
+    "tailwindcss": ">=3.4 <5"
   },
   "dependencies": {
     "@phosphor-icons/react": ">=2"

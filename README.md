@@ -23,6 +23,41 @@ If your app does not already include React and React DOM, install them as well:
 npm install react react-dom
 ```
 
+This library uses Tailwind CSS. Install Tailwind CSS in the consuming application and follow the configuration below so Tailwind generates the library's classes.
+
+## Tailwind CSS setup
+
+Import the supplied base theme once from your application's global CSS file:
+
+```css
+@import "ssovee-os-web-ui/theme.css";
+```
+
+For Tailwind v3, add the library build output to `content` and use the supplied preset:
+
+```js
+import ssoveePreset from "ssovee-os-web-ui/tailwind-preset";
+
+export default {
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/ssovee-os-web-ui/dist/**/*.{js,mjs,cjs}",
+  ],
+  presets: [ssoveePreset],
+};
+```
+
+For Tailwind v4, add the package as a source in your global CSS file and load a config containing the same preset:
+
+```css
+@import "tailwindcss";
+@source "../node_modules/ssovee-os-web-ui/dist";
+@config "../tailwind.config.js";
+@import "ssovee-os-web-ui/theme.css";
+```
+
+The preset includes the library's semantic colors (`primary`, `secondary`, `surface-*`, `brand-color`, `border-1`, and `muted`). Override the `--ssovee-*` CSS variables in your application to customize the theme.
+
 ## Usage
 
 ```tsx
