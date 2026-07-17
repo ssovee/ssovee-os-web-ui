@@ -16,7 +16,7 @@
     "library",
     "typescript"
   ],
-  "sideEffects": false,
+  "sideEffects": ["**/*.css"],
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",

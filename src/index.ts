@@ -1,5 +1,7 @@
 // UI Library Main Export File
 
+import "../theme.css";
+
 export { default as Button } from "./components/Button";
 export { default as Input } from "./components/Input";
 export { default as TextArea } from "./components/TextArea";
@@ -27,10 +29,6 @@ export { default as Typography } from "./components/Typography";
 export { default as ImageWithPlaceholder } from "./components/ImageWithPlaceholder";
 export * from "./components/Table";
 
-// Hooks and utilities
-export { default as useShortcutFormatter } from "./hooks/useShortcutFormatter";
-export { cn } from "./utils/helpers";
-
 // Types
 export type { ButtonProps } from "./components/Button";
 export type { InputProps } from "./components/Input";
@@ -54,4 +52,3 @@ export type { PaginationProps } from "./components/Pagination";
 export type { RadioProps } from "./components/Radio";
 export type { TypographyProps } from "./components/Typography";
 export type { ImageWithPlaceholderProps } from "./components/ImageWithPlaceholder";
-export type { OS, UseShortcutFormatterReturn } from "./hooks/useShortcutFormatter";

@@ -25,6 +25,8 @@ npm install react react-dom
 
 This library uses Tailwind CSS. Install Tailwind CSS in the consuming application and follow the configuration below so Tailwind generates the library's classes.
 
+The package entry is intended to provide the public React component surface. Internal helper hooks and utilities used by the components remain implementation details and are not part of the consumer-facing API.
+
 ## Tailwind CSS setup
 
 Import the supplied base theme once from your application's global CSS file:
@@ -103,8 +105,8 @@ The library publishes the following shared UI components from the package entry 
 - `Typography`
 - `ImageWithPlaceholder`
 - `Table` and its table subcomponents
-- `useShortcutFormatter`
-- `cn`
+
+Internal helper hooks and utilities such as `useShortcutFormatter` and `cn` are used within the component implementation and are not documented as public package exports.
 
 ## Package structure
 
@@ -123,15 +125,9 @@ npm install
 npm run build
 ```
 
-## Hook and utility usage
+## Internal component helpers
 
-```tsx
-import { cn, useShortcutFormatter } from "ssovee-os-web-ui";
-
-const { formatKeys } = useShortcutFormatter();
-const className = cn("button", isActive && "button-active");
-const shortcutLabel = formatKeys(["ctrl", "k"]);
-```
+The source tree contains helper hooks and utilities used only by the component implementation. These are internal implementation details and are not intended to be consumed directly via the library package entry.
 
 ## Versioning and release
 
