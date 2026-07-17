@@ -49,13 +49,26 @@ export default {
 };
 ```
 
-For Tailwind v4, add the package as a source in your global CSS file and load a config containing the same preset:
+For Tailwind v4, import the package theme stylesheet directly in your global CSS. The package theme entry already carries the Tailwind bootstrap and library source scanning for the built dist output, so consumers do not need to repeat the `@source`/`@import "tailwindcss"` lines in their app CSS:
 
 ```css
-@import "tailwindcss";
-@source "../node_modules/ssovee-os-web-ui/dist";
-@config "../tailwind.config.js";
 @import "ssovee-os-web-ui/theme.css";
+```
+
+If you use a project-level `tailwind.config.js`, the package also publishes a ready-to-reference config entry that already applies the preset by default:
+
+```js
+import ssoveePreset from "ssovee-os-web-ui/tailwind-preset";
+
+export default {
+  presets: [ssoveePreset],
+};
+```
+
+You can also point your app at the published config file directly via the package export:
+
+```js
+import ssoveePreset from "ssovee-os-web-ui/tailwind.config.js";
 ```
 
 The preset includes the library's semantic colors (`primary`, `secondary`, `surface-*`, `brand-color`, `border-1`, and `muted`). Override the `--ssovee-*` CSS variables in your application to customize the theme.
