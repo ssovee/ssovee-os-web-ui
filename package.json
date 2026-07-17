@@ -1,6 +1,6 @@
 {
   "name": "ssovee-os-web-ui",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Reusable UI component library for shared applications.",
   "author": "SSOVEE",
   "license": "MIT",
@@ -16,7 +16,9 @@
     "library",
     "typescript"
   ],
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
