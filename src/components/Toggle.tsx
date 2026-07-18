@@ -98,7 +98,14 @@ const Toggle = React.forwardRef<HTMLButtonElement, ToggleProps>(
           </button>
           
           {label && (
-            <span className="text-sm text-neutral-500 cursor-pointer select-none" onClick={handleClick}>
+            <span
+              className={cn(
+                "text-sm text-neutral-500 select-none",
+                disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+              )}
+              onClick={disabled ? undefined : handleClick}
+              aria-disabled={disabled}
+            >
               {label}
             </span>
           )}

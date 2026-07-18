@@ -96,11 +96,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           
           {showSubmitButton && (
-            <ArrowCircleRightIcon
-              size={20}
+            <button
+              type="button"
               onClick={onSubmit}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-300 cursor-pointer hover:text-neutral-400 transition-colors"
-            />
+              disabled={props.disabled || props.readOnly || !onSubmit}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-300 transition-colors hover:text-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Submit input"
+            >
+              <ArrowCircleRightIcon size={20} />
+            </button>
           )}
         </div>
         

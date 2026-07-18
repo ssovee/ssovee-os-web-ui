@@ -54,16 +54,22 @@ TableFooter.displayName = "TableFooter"
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => (
-  <tr
-    ref={ref}
-    className={cn(
-      "border-t border-surface-1 group hover:bg-surface-4 hover:text-neutral-500 cursor-pointer",
-      className
-    )}
-    {...props}
-  />
-))
+>(({ className, onClick, ...props }, ref) => {
+  const isInteractive = typeof onClick === "function";
+
+  return (
+    <tr
+      ref={ref}
+      onClick={onClick}
+      className={cn(
+        "border-t border-surface-1 group hover:bg-surface-4 hover:text-neutral-500",
+        isInteractive ? "cursor-pointer" : "cursor-default",
+        className
+      )}
+      {...props}
+    />
+  );
+})
 TableRow.displayName = "TableRow"
 
 const TableHead = React.forwardRef<

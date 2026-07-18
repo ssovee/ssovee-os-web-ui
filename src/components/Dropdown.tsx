@@ -80,7 +80,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div ref={dropdownRef} className="">
       {trigger ? (
-        <div onClick={handleToggle} className="cursor-pointer">
+        <div
+          onClick={handleToggle}
+          className={cn(disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer")}
+          aria-disabled={disabled}
+        >
           {trigger}
         </div>
       ) : (

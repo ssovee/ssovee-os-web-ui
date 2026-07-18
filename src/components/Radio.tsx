@@ -19,6 +19,7 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
       variant = "default",
       error,
       helperText,
+      disabled,
       ...props
     },
     ref
@@ -51,6 +52,7 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
                 error && "border-red-500 focus:border-red-500 focus:ring-red-500/50",
                 className
               )}
+              disabled={disabled}
               {...props}
             />
             
@@ -60,7 +62,12 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
           </div>
           
           {label && (
-            <label className="text-sm text-neutral-400 cursor-pointer select-none">
+            <label
+              className={cn(
+                "text-sm text-neutral-400 select-none",
+                disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+              )}
+            >
               {label}
             </label>
           )}

@@ -24,6 +24,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       indeterminate = false,
       checked,
       onChange,
+      disabled,
       ...props
     },
     ref
@@ -58,6 +59,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
               )}
               defaultChecked={checked}
               onChange={onChange}
+              disabled={disabled}
               {...props}
             />
             
@@ -73,7 +75,12 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
           </div>
           
           {label && (
-            <label className="text-sm text-neutral-400 cursor-pointer select-none">
+            <label
+              className={cn(
+                "text-sm text-neutral-400 select-none",
+                disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+              )}
+            >
               {label}
             </label>
           )}
