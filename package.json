@@ -38,12 +38,11 @@
     "README.md",
     "LICENSE",
     "tailwind-preset.js",
-    "tailwind.config.js",
-    "theme.css"
+    "tailwind.config.js"
   ],
   "scripts": {
     "build": "tsup && npm run build:css",
-    "build:css": "tailwindcss -i ./theme.css -o ./dist/index.css",
+    "build:css": "tailwindcss -i ./src/theme.css -o ./dist/index.css",
     "prepublishOnly": "npm run typecheck && npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

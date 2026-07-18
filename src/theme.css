@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@source "./dist";
+@source "../dist";
 
 :root {
   --ssovee-primary: 15 23 42;

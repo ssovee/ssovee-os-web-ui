@@ -1,6 +1,6 @@
 // UI Library Main Export File
 
-import "../theme.css";
+import "./theme.css";
 
 export { default as Button } from "./components/Button";
 export { default as Input } from "./components/Input";
