@@ -1,14 +1,110 @@
 @import "tailwindcss";
 @source "../dist";
 
-:root {
-  --ssovee-primary: 15 23 42;
-  --ssovee-secondary: 30 41 59;
-  --ssovee-surface-1: 51 65 85;
-  --ssovee-surface-2: 40 53 72;
-  --ssovee-surface-3: 30 41 59;
-  --ssovee-surface-4: 51 65 85;
-  --ssovee-brand-color: 59 130 246;
-  --ssovee-border-1: 71 85 105;
-  --ssovee-muted: 100 116 139;
+@layer base {
+  * {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--primary);
+    color: var(--neutral-500);
+  }
+
+  :root {
+    /* Light Theme Defaults */
+    --primary: rgba(216, 216, 216, 0.85);
+    --secondary: rgba(252, 252, 252, 0.8);
+    --tertiary: rgba(152, 162, 179, 0.3);
+
+    --surface-1: rgba(69, 73, 85, 0.2);
+    --surface-2: rgba(255, 255, 255, 0.65);
+    --surface-3: rgba(245, 245, 245, 1);
+    --surface-4: rgba(255, 255, 255, 1);
+
+    --neutral-700: rgba(0, 0, 0, 0.6);
+    --neutral-600: rgba(0, 0, 0, 1);
+    --neutral-500: rgba(18, 19, 22, 1);
+    --neutral-400: rgba(46, 48, 56, 1);
+    --neutral-300: rgba(83, 87, 101, 1);
+    --neutral-200: rgba(110, 116, 135, 1);
+    --neutral-100: rgba(255, 255, 255, 1);
+
+    --brand-color: rgba(10, 132, 255, 1);
+
+    --border-1: rgba(69, 73, 85, 0.2);
+    --border-2: rgba(255, 255, 255, 0.06);
+    --border-3: rgba(69, 73, 85, 0.2);
+
+    /* Preset tokens used by Tailwind color mappings */
+    --ssovee-primary: 216 216 216;
+    --ssovee-secondary: 252 252 252;
+    --ssovee-surface-1: 69 73 85;
+    --ssovee-surface-2: 255 255 255;
+    --ssovee-surface-3: 245 245 245;
+    --ssovee-surface-4: 255 255 255;
+    --ssovee-brand-color: 10 132 255;
+    --ssovee-border-1: 69 73 85;
+    --ssovee-muted: 110 116 135;
+  }
+
+  .dark {
+    /* Dark Theme Overrides */
+    --primary: rgba(43, 43, 43, 0.2);
+    --secondary: rgba(43, 43, 43, 0.7);
+    --tertiary: rgba(204, 204, 204, 0.1);
+
+    --surface-1: rgba(235, 235, 235, 0.2);
+    --surface-2: rgba(58, 58, 58, 1);
+    --surface-3: rgba(255, 255, 255, 0.2);
+    --surface-4: rgba(255, 255, 255, 0.05);
+
+    --neutral-700: rgba(255, 255, 255, 0.6);
+    --neutral-600: rgba(255, 255, 255, 1);
+    --neutral-500: rgba(245, 245, 245, 1);
+    --neutral-400: rgba(205, 205, 205, 1);
+    --neutral-300: rgba(166, 166, 166, 1);
+    --neutral-200: rgba(128, 128, 128, 1);
+    --neutral-100: rgba(93, 93, 93, 1);
+
+    --brand-color: rgba(10, 132, 255, 1);
+
+    --border-1: rgba(235, 235, 245, 0.2);
+    --border-2: rgba(255, 255, 255, 0.06);
+    --border-3: rgba(255, 255, 255, 0.1);
+
+    /* Preset tokens used by Tailwind color mappings */
+    --ssovee-primary: 43 43 43;
+    --ssovee-secondary: 43 43 43;
+    --ssovee-surface-1: 235 235 235;
+    --ssovee-surface-2: 58 58 58;
+    --ssovee-surface-3: 255 255 255;
+    --ssovee-surface-4: 255 255 255;
+    --ssovee-brand-color: 10 132 255;
+    --ssovee-border-1: 235 235 245;
+    --ssovee-muted: 128 128 128;
+  }
+
+  .bg-primary,
+  .bg-secondary {
+    backdrop-filter: blur(40px);
+  }
+
+  .window-drop-shadow {
+    backdrop-filter: blur(40px);
+    filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.5))
+      drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2))
+      drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12));
+  }
+
+  .input-inner-shadow {
+    box-shadow: inset 0 1.5px 1.5px rgba(0, 0, 0, 0.1),
+      inset 0 -0.5px 0 rgba(255, 255, 255, 0.09),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+      inset 0 0.5px 0 rgba(255, 255, 255, 0.05);
+  }
 }
