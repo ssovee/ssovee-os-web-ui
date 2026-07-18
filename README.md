@@ -2,6 +2,16 @@
 
 Reusable React UI components for consuming projects.
 
+## Overview
+
+This package provides a shared set of React UI components for SSOVEE applications. It ships component styles through the package stylesheet and includes the Tailwind dependency required by the library.
+
+## Features
+
+- Ready-to-use React UI components
+- Packaged theme stylesheet for shared visual tokens
+- TypeScript types for the main public components
+
 ## Install
 
 ```bash
@@ -71,3 +81,7 @@ The package exports these components and types for external use:
 - `Table` and its subcomponents
 
 Internal helpers such as `useShortcutFormatter` and `cn` are used inside the library implementation and are not part of the recommended consumer API.
+
+## License
+
+MIT

@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { CaretUpIcon, CaretDownIcon } from "@phosphor-icons/react";
 
