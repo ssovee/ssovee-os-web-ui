@@ -26,7 +26,13 @@ npm install react react-dom
 
 ## CSS import
 
-In the consuming app, add only the package theme stylesheet to your global CSS:
+Import the package stylesheet once in your app entry file or global stylesheet:
+
+```ts
+import "ssovee-os-web-ui/theme.css";
+```
+
+If your setup prefers CSS imports, this also works:
 
 ```css
 @import "ssovee-os-web-ui/theme.css";
