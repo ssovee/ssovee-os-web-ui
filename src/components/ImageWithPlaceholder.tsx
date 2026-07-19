@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "../utils/helpers";
 
-export interface ImageWithPlaceholderProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+type ImageSource = string | { src: string };
+
+export interface ImageWithPlaceholderProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, "src"> {
+    src?: ImageSource;
     fallbackSrc?: string;
 }
 
@@ -13,31 +16,36 @@ const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
     onError,
     ...props
 }) => {
-    const isValidSrc = (s: string | object | undefined | null) => {
-        if (!s) return false;
-        if (typeof s === "object") return true;
-        if (typeof s === "string") {
-            const trimmed = s.trim();
-            if (trimmed === "") return false;
-            if (trimmed.startsWith("data:")) return true;
-            if (trimmed.startsWith("/") || trimmed.startsWith("./") || trimmed.startsWith("../")) return true;
-            try {
-                new URL(trimmed);
-                return true;
-            } catch {
-                return false;
-            }
+    const resolveSrc = (s: ImageSource | undefined | null) => {
+        if (s && typeof s === "object" && "src" in s && typeof s.src === "string") {
+            return s.src;
         }
-        return true;
+        return typeof s === "string" ? s : undefined;
     };
 
-    const initialSrc = isValidSrc(src) ? src : fallbackSrc;
+    const isValidSrc = (s: string | undefined | null) => {
+        if (!s) return false;
+        const trimmed = s.trim();
+        if (trimmed === "") return false;
+        if (trimmed.startsWith("data:")) return true;
+        if (trimmed.startsWith("/") || trimmed.startsWith("./") || trimmed.startsWith("../")) return true;
+        try {
+            new URL(trimmed);
+            return true;
+        } catch {
+            return false;
+        }
+    };
+
+    const resolvedSrc = resolveSrc(src);
+    const initialSrc = isValidSrc(resolvedSrc) ? resolvedSrc : fallbackSrc;
     const [imgSrc, setImgSrc] = useState(initialSrc);
-    const [hasError, setHasError] = useState(!isValidSrc(src));
+    const [hasError, setHasError] = useState(!isValidSrc(resolvedSrc));
 
     useEffect(() => {
-        if (isValidSrc(src)) {
-            setImgSrc(src);
+        const nextResolvedSrc = resolveSrc(src);
+        if (isValidSrc(nextResolvedSrc)) {
+            setImgSrc(nextResolvedSrc);
             setHasError(false);
         } else {
             setImgSrc(fallbackSrc);
