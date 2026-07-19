@@ -31,10 +31,11 @@
     },
     "./tailwind-preset": "./tailwind-preset.js",
     "./tailwind.config.js": "./tailwind.config.js",
-    "./theme.css": "./dist/index.css"
+    "./theme.css": "./theme.css"
   },
   "files": [
     "dist",
+    "theme.css",
     "README.md",
     "LICENSE",
     "tailwind-preset.js",

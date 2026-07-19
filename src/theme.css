@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @source "../dist";
 
+@theme {
+  --color-primary: rgb(var(--ssovee-primary) / 1);
+  --color-secondary: rgb(var(--ssovee-secondary) / 1);
+  --color-surface-1: rgb(var(--ssovee-surface-1) / 1);
+  --color-surface-2: rgb(var(--ssovee-surface-2) / 1);
+  --color-surface-3: rgb(var(--ssovee-surface-3) / 1);
+  --color-surface-4: rgb(var(--ssovee-surface-4) / 1);
+  --color-brand-color: rgb(var(--ssovee-brand-color) / 1);
+  --color-border-1: rgb(var(--ssovee-border-1) / 1);
+  --color-muted: rgb(var(--ssovee-muted) / 1);
+}
+
 @layer base {
   * {
     user-select: none;
