@@ -41,7 +41,9 @@ jobs:
         run: npm --prefix apps/www ci
 
       - name: Build demo for Pages
-        run: npm --prefix apps/www run build -- --base=/ssovee-os-web-ui/
+        env:
+          GITHUB_PAGES: true
+        run: npm --prefix apps/www run build
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
