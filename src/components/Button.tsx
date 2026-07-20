@@ -42,7 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     
     const variantClasses = {
       primary: "bg-brand-color text-white hover:bg-brand-color/90 active:bg-brand-color/80 focus-visible:ring-brand-color/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-brand-color/50 disabled:text-white/80",
-      secondary: "bg-surface-3 text-neutral-100 hover:bg-surface-4 active:bg-surface-4 focus-visible:ring-surface-3/50 border border-surface-4 shadow-sm hover:shadow-md active:shadow-none disabled:bg-surface-3/50",
+      secondary: "bg-surface-3 text-neutral-500 hover:bg-surface-4 active:bg-surface-4 focus-visible:ring-surface-3/50 border border-surface-4 shadow-sm hover:shadow-md active:shadow-none disabled:bg-surface-3/50",
       outline: "bg-transparent text-neutral-400 border border-surface-1 hover:bg-surface-1 active:bg-surface-1 focus-visible:ring-surface-1/50",
       ghost: "bg-transparent text-neutral-400 hover:bg-surface-1 active:bg-surface-1 focus-visible:ring-surface-1/50",
       danger: "bg-red-500 text-white hover:bg-red-600 active:bg-red-600 focus-visible:ring-red-500/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-red-500/50",
