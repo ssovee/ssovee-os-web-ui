@@ -85,8 +85,10 @@ The package exports these components and types for external use:
 - `Typography`
 - `ImageWithPlaceholder`
 - `Table` and its subcomponents
+- `useGridClasses`
+- `useShortcutFormatter`
 
-Internal helpers such as `useShortcutFormatter` and `cn` are used inside the library implementation and are not part of the recommended consumer API.
+The hooks are exported from the package entrypoint alongside the components.
 
 ## License
 

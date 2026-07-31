@@ -120,3 +120,68 @@
       inset 0 0.5px 0 rgba(255, 255, 255, 0.05);
   }
 }
+
+/* Grid utilities used by useGridClasses */
+.window-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.col-span-mobile-12,
+.col-span-tablet-12,
+.col-span-desktop-12 {
+  grid-column: span 12 / span 12;
+}
+
+.col-span-mobile-10,
+.col-span-tablet-10,
+.col-span-desktop-10 {
+  grid-column: span 10 / span 10;
+}
+
+.col-span-mobile-9,
+.col-span-tablet-9,
+.col-span-desktop-9 {
+  grid-column: span 9 / span 9;
+}
+
+.col-span-mobile-8,
+.col-span-tablet-8,
+.col-span-desktop-8 {
+  grid-column: span 8 / span 8;
+}
+
+.col-span-mobile-7 {
+  grid-column: span 7 / span 7;
+}
+
+.col-span-mobile-6,
+.col-span-tablet-6,
+.col-span-desktop-6 {
+  grid-column: span 6 / span 6;
+}
+
+.col-span-mobile-4,
+.col-span-tablet-4,
+.col-span-desktop-4 {
+  grid-column: span 4 / span 4;
+}
+
+.col-span-mobile-3,
+.col-span-tablet-3,
+.col-span-desktop-3 {
+  grid-column: span 3 / span 3;
+}
+
+.col-span-mobile-2,
+.col-span-tablet-2,
+.col-span-desktop-2 {
+  grid-column: span 2 / span 2;
+}
+
+.col-span-mobile-1,
+.col-span-tablet-1,
+.col-span-desktop-1 {
+  grid-column: span 1 / span 1;
+}

@@ -62,7 +62,8 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@phosphor-icons/react": ">=2"
+    "@phosphor-icons/react": ">=2",
+    "ua-parser-js": "^2.0.4"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",
