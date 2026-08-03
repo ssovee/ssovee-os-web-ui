@@ -30,6 +30,11 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./sdk": {
+      "types": "./dist/sdk.d.ts",
+      "import": "./dist/sdk.js",
+      "require": "./dist/sdk.cjs"
+    },
     "./tailwind-preset": "./tailwind-preset.js",
     "./tailwind.config.js": "./tailwind.config.js",
     "./theme.css": "./dist/index.css",

@@ -53,6 +53,14 @@ export function Example() {
 }
 ```
 
+## Hooks
+
+Hooks are also available through the SDK-style entrypoint:
+
+```tsx
+import { useGridClasses, useDeviceSupport, useSound } from "ssovee-os-web-ui/sdk";
+```
+
 ## Public exports
 
 The package exports these components and types for external use:
@@ -87,8 +95,10 @@ The package exports these components and types for external use:
 - `Table` and its subcomponents
 - `useGridClasses`
 - `useShortcutFormatter`
+- `useDeviceSupport`
+- `useSound`
 
-The hooks are exported from the package entrypoint alongside the components.
+The hooks are available from the package entrypoint and from the SDK subpath.
 
 ## License
 

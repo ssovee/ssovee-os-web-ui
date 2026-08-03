@@ -28,6 +28,8 @@ export { default as ImageWithPlaceholder } from "./components/ImageWithPlacehold
 export * from "./components/Table";
 export { default as useGridClasses } from "./hooks/useGridClasses";
 export { default as useShortcutFormatter } from "./hooks/useShortcutFormatter";
+export { useDeviceSupport } from "./hooks/useDeviceSupport";
+export { useSound } from "./hooks/useSound";
 
 // Types
 export type { ButtonProps } from "./components/Button";
