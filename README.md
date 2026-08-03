@@ -1,16 +1,23 @@
 # ssovee-os-web-ui
 
-Reusable React UI components for consuming projects.
+Reusable React UI components for building shared desktop-style web experiences.
 
 ## Overview
 
-This package provides a shared set of React UI components for SSOVEE applications. It ships component styles through the package stylesheet and includes the Tailwind dependency required by the library.
+This package provides a shared set of React UI components for SSOVEE applications. It includes themed UI primitives, hooks, and desktop-style window wrappers for app-like layouts.
+
+## What’s new in v0.1.24
+
+- Added window container components for app-style layouts
+- Documented usage examples for both window variants
+- Improved package exports for easier consumption
 
 ## Features
 
 - Ready-to-use React UI components
 - Packaged theme stylesheet for shared visual tokens
-- TypeScript types for the main public components
+- TypeScript support for the main public components
+- Window components for desktop-style app shells
 
 ## Install
 
@@ -38,7 +45,7 @@ If your setup prefers CSS imports, this also works:
 @import "ssovee-os-web-ui/theme.css";
 ```
 
-## Use components
+## Basic usage
 
 ```tsx
 import { Button, Input, Card } from "ssovee-os-web-ui";
@@ -49,6 +56,70 @@ export function Example() {
       <Input placeholder="Search" />
       <Button variant="primary">Save</Button>
     </Card>
+  );
+}
+```
+
+## Window components
+
+### Simple window
+
+```tsx
+import { WindowWithoutSideMenu, Typography } from "ssovee-os-web-ui";
+
+const app = {
+  name: "Notes",
+  slug: "notes",
+  isActive: true,
+  isMinimize: false,
+  windowSize: {
+    windowSize: { width: 420, height: 320 },
+    isAppWindowResizing: false,
+  },
+};
+
+export function NotesWindow() {
+  return (
+    <WindowWithoutSideMenu app={app} defaultSize={{ width: 420, height: 320 }}>
+      <Typography variant="h6">Notes</Typography>
+    </WindowWithoutSideMenu>
+  );
+}
+```
+
+### Window with sidebar menu
+
+```tsx
+import { WindowWithSideMenu, Typography, Button } from "ssovee-os-web-ui";
+
+const app = {
+  name: "Settings",
+  slug: "settings",
+  isActive: true,
+  isMinimize: false,
+  windowSize: {
+    windowSize: { width: 720, height: 500 },
+    isAppWindowResizing: false,
+  },
+};
+
+export function SettingsWindow() {
+  return (
+    <WindowWithSideMenu
+      app={app}
+      defaultSize={{ width: 720, height: 500 }}
+      actionButtons={{ title: "Save", onClick: () => console.log("Saved") }}
+      menu={{
+        title: "Navigation",
+        items: [
+          { title: "Profile", icon: "👤", onClick: () => console.log("Profile"), isActive: true },
+          { title: "Security", icon: "🔒", onClick: () => console.log("Security") },
+        ],
+      }}
+    >
+      <Typography variant="h6">Settings</Typography>
+      <Button variant="primary">Update</Button>
+    </WindowWithSideMenu>
   );
 }
 ```
@@ -92,6 +163,8 @@ The package exports these components and types for external use:
 - `Tabs`
 - `Typography`
 - `ImageWithPlaceholder`
+- `WindowWithSideMenu`
+- `WindowWithoutSideMenu`
 - `Table` and its subcomponents
 - `useGridClasses`
 - `useShortcutFormatter`

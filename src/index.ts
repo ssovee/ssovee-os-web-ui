@@ -25,6 +25,8 @@ export { default as Accordion } from "./components/Accordion";
 export { default as Tabs } from "./components/Tabs";
 export { default as Typography } from "./components/Typography";
 export { default as ImageWithPlaceholder } from "./components/ImageWithPlaceholder";
+export { default as WindowWithSideMenu } from "./components/WindowWithSideMenu";
+export { default as WindowWithoutSideMenu } from "./components/WindowWithoutSideMenu";
 export * from "./components/Table";
 export { default as useGridClasses } from "./hooks/useGridClasses";
 export { default as useShortcutFormatter } from "./hooks/useShortcutFormatter";
