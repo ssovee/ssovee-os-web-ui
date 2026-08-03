@@ -64,6 +64,7 @@ export function Example() {
 
 ### Simple window
 
+{% raw %}
 ```tsx
 import { WindowWithoutSideMenu, Typography } from "ssovee-os-web-ui";
 
@@ -86,9 +87,11 @@ export function NotesWindow() {
   );
 }
 ```
+{% endraw %}
 
 ### Window with sidebar menu
 
+{% raw %}
 ```tsx
 import { WindowWithSideMenu, Typography, Button } from "ssovee-os-web-ui";
 
@@ -123,6 +126,7 @@ export function SettingsWindow() {
   );
 }
 ```
+{% endraw %}
 
 ## Hooks
 
