@@ -58,3 +58,4 @@ export type { PaginationProps } from "./components/Pagination";
 export type { RadioProps } from "./components/Radio";
 export type { TypographyProps } from "./components/Typography";
 export type { ImageWithPlaceholderProps } from "./components/ImageWithPlaceholder";
+export type { AppInterface } from "./types/appsList";
