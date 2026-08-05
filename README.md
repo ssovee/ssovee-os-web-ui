@@ -123,6 +123,34 @@ export function SettingsWindow() {
 ```
 {% endraw %}
 
+## Plugin playground
+
+```tsx
+import { PluginPlayground, Typography, Button } from "ssovee-os-web-ui";
+
+const pluginMetadata = {
+  title: "Plugin Preview",
+  defaultWidth: 720,
+  defaultHeight: 520,
+  windowVariant: "with-side-menu",
+};
+
+export function PluginPreview() {
+  return (
+    <PluginPlayground
+      metadata={pluginMetadata}
+      onClose={() => console.log("Playground closed")}
+      onMinimize={(isMinimized) => console.log("Minimized:", isMinimized)}
+    >
+      <div>
+        <Typography variant="h6">Plugin Content</Typography>
+        <Button variant="primary">Run</Button>
+      </div>
+    </PluginPlayground>
+  );
+}
+```
+
 ## Hooks
 
 Hooks are also available through the SDK-style entrypoint:
