@@ -28,9 +28,35 @@ import Accordion from "../components/Accordion";
 import Tabs from "../components/Tabs";
 import Typography from "../components/Typography";
 import ImageWithPlaceholder from "../components/ImageWithPlaceholder";
+import WindowWithSideMenu from "../components/WindowWithSideMenu";
+import WindowWithoutSideMenu from "../components/WindowWithoutSideMenu";
+import PluginPlayground from "../components/PluginPlayground";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/Table";
 
 describe("component smoke tests", () => {
+  const sampleApp = {
+    name: "Test App",
+    slug: "test-app",
+    isActive: true,
+    isMinimize: false,
+    windowSize: { windowSize: { width: 420, height: 320 }, isAppWindowResizing: false },
+  };
+
+  beforeAll(() => {
+    if (!(window as any).matchMedia) {
+      (window as any).matchMedia = () => ({
+        matches: false,
+        media: "",
+        onchange: null,
+        addListener: () => null,
+        removeListener: () => null,
+        addEventListener: () => null,
+        removeEventListener: () => null,
+        dispatchEvent: () => false,
+      });
+    }
+  });
+
   it("renders Button with children and click event", async () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
@@ -296,5 +322,53 @@ describe("component smoke tests", () => {
   it("renders Typography text", () => {
     render(<Typography variant="p">Welcome</Typography>);
     expect(screen.getByText(/welcome/i)).toBeInTheDocument();
+  });
+
+  it("renders WindowWithoutSideMenu with title", () => {
+    render(
+      <WindowWithoutSideMenu app={sampleApp} defaultSize={{ width: 420, height: 320 }}>
+        <Typography variant="h6">Notes</Typography>
+      </WindowWithoutSideMenu>
+    );
+
+    expect(screen.getByText(/notes/i)).toBeInTheDocument();
+  });
+
+  it("renders WindowWithSideMenu with menu and action button", () => {
+    render(
+      <WindowWithSideMenu
+        app={sampleApp}
+        defaultSize={{ width: 720, height: 500 }}
+        actionButtons={{ title: "Save", onClick: vi.fn() }}
+        menu={{
+          title: "Navigation",
+          items: [
+            { title: "Profile", icon: "👤", onClick: vi.fn(), isActive: true },
+            { title: "Security", icon: "🔒", onClick: vi.fn() },
+          ],
+        }}
+      >
+        <Typography variant="h6">Settings</Typography>
+      </WindowWithSideMenu>
+    );
+
+    expect(screen.getByText(/settings/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /profile/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /save/i })).toBeInTheDocument();
+  });
+
+  it("renders PluginPlayground and displays plugin content", () => {
+    render(
+      <PluginPlayground
+        metadata={{ title: "Plugin Preview", defaultWidth: 640, defaultHeight: 480 }}
+        onClose={vi.fn()}
+        onMinimize={vi.fn()}
+      >
+        <div>Plugin Content</div>
+      </PluginPlayground>
+    );
+
+    expect(screen.getByText(/plugin content/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /mood/i })).toBeInTheDocument();
   });
 });

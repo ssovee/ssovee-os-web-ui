@@ -25,6 +25,7 @@ export { default as Accordion } from "./components/Accordion";
 export { default as Tabs } from "./components/Tabs";
 export { default as Typography } from "./components/Typography";
 export { default as ImageWithPlaceholder } from "./components/ImageWithPlaceholder";
+export { default as PluginPlayground } from "./components/PluginPlayground";
 export { default as WindowWithSideMenu } from "./components/WindowWithSideMenu";
 export { default as WindowWithoutSideMenu } from "./components/WindowWithoutSideMenu";
 export * from "./components/Table";
