@@ -6,18 +6,13 @@ Reusable React UI components for building shared desktop-style web experiences.
 
 This package provides a shared set of React UI components for SSOVEE applications. It includes themed UI primitives, hooks, and desktop-style window wrappers for app-like layouts.
 
-## What’s new in v0.1.24
-
-- Added window container components for app-style layouts
-- Documented usage examples for both window variants
-- Improved package exports for easier consumption
-
 ## Features
 
 - Ready-to-use React UI components
 - Packaged theme stylesheet for shared visual tokens
 - TypeScript support for the main public components
 - Window components for desktop-style app shells
+- Plugin playground support for local plugin testing
 
 ## Install
 
@@ -167,6 +162,7 @@ The package exports these components and types for external use:
 - `Tabs`
 - `Typography`
 - `ImageWithPlaceholder`
+- `PluginPlayground`
 - `WindowWithSideMenu`
 - `WindowWithoutSideMenu`
 - `Table` and its subcomponents

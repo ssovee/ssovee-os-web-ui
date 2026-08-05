@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import {
   Accordion,
   Alert,
@@ -325,6 +325,10 @@ function DemoShowcase({ title, description, variants }: { title: string; descrip
 
 function App() {
   const [componentFilter, setComponentFilter] = useState('')
+  const [activeSection, setActiveSection] = useState(() => {
+    if (typeof window === 'undefined') return ''
+    return window.location.hash.slice(1) || ''
+  })
   const [name, setName] = useState('Shivam')
   const [description, setDescription] = useState('A reusable design system component library.')
   const [selectValue, setSelectValue] = useState('react')
@@ -344,6 +348,26 @@ function App() {
   const [avatarClicks, setAvatarClicks] = useState(0)
   const [selectedTab, setSelectedTab] = useState(0)
   const [showFullscreenLoading, setShowFullscreenLoading] = useState(false)
+
+  useEffect(() => {
+    const updateTitle = () => {
+      const section = activeSection ? `${activeSection.charAt(0).toUpperCase()}${activeSection.slice(1)}` : 'All Components'
+      document.title = `${section} · SSOVEE OS Web UI`
+    }
+
+    updateTitle()
+  }, [activeSection])
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setActiveSection(window.location.hash.slice(1))
+    }
+
+    window.addEventListener('hashchange', handleHashChange)
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange)
+    }
+  }, [])
 
   const filteredComponents = useMemo(() => {
     const q = componentFilter.trim().toLowerCase()

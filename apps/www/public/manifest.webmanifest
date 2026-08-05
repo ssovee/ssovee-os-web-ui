@@ -1,0 +1,16 @@
+{
+  "name": "SSOVEE OS Web UI",
+  "short_name": "SSOVEE UI",
+  "description": "Reusable React UI components and desktop-style app layouts for SSOVEE applications.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/ssovee/ssovee-os-web-ui.git"
   },
-  "homepage": "https://github.com/ssovee/ssovee-os-web-ui#readme",
+  "homepage": "https://ssovee.github.io/ssovee-os-web-ui",
   "keywords": [
     "react",
     "ui",
