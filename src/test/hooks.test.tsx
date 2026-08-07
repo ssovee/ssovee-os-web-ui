@@ -31,13 +31,13 @@ describe("hook exports and sound behavior", () => {
     vi.stubGlobal("Audio", AudioMock as unknown as typeof Audio);
 
     const { result } = renderHook(() => useSound());
-    const firstPlay = await result.current.playSound("notification", { volume: 0.25 });
-    const secondPlay = await result.current.playSound("notification");
+    result.current.playSound("notification", { volume: 0.25 });
+    result.current.playSound("notification");
+
+    await Promise.resolve();
 
     expect(AudioMock).toHaveBeenCalledWith(expect.stringContaining("notification-tone.wav"));
     expect(AudioMock).toHaveBeenCalledTimes(2);
     expect(play).toHaveBeenCalledTimes(2);
-    expect(firstPlay).toBe(true);
-    expect(secondPlay).toBe(true);
   });
 });

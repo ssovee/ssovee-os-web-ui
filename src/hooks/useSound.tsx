@@ -1,9 +1,4 @@
 import { useCallback } from "react";
-import clickTone from "../assets/sounds/click-tone.wav";
-import errorTone from "../assets/sounds/error-tone.wav";
-import notificationTone from "../assets/sounds/notification-tone.wav";
-import successTone from "../assets/sounds/success-tone.wav";
-import swipeTone from "../assets/sounds/swipe-tone.wav";
 
 export type SoundType =
   | "click"
@@ -19,12 +14,12 @@ export interface PlaySoundOptions {
 }
 
 const soundMap: Record<SoundType, string> = {
-  click: clickTone,
-  alert: errorTone,
-  notification: notificationTone,
-  error: errorTone,
-  success: successTone,
-  swipe: swipeTone,
+  click: new URL("../assets/sounds/click-tone.wav", import.meta.url).href,
+  alert: new URL("../assets/sounds/error-tone.wav", import.meta.url).href,
+  notification: new URL("../assets/sounds/notification-tone.wav", import.meta.url).href,
+  error: new URL("../assets/sounds/error-tone.wav", import.meta.url).href,
+  success: new URL("../assets/sounds/success-tone.wav", import.meta.url).href,
+  swipe: new URL("../assets/sounds/swipe-tone.wav", import.meta.url).href,
 };
 
 type PendingPlayback = {
@@ -36,6 +31,25 @@ let pendingPlaybackQueue: PendingPlayback[] = [];
 let interactionListenersBound = false;
 
 const clampVolume = (value: number) => Math.min(1, Math.max(0, value));
+
+const resolveSoundSrc = (soundSrc: string) => {
+  if (!soundSrc) return soundSrc;
+
+  if (
+    soundSrc.startsWith("http://") ||
+    soundSrc.startsWith("https://") ||
+    soundSrc.startsWith("data:") ||
+    soundSrc.startsWith("blob:")
+  ) {
+    return soundSrc;
+  }
+
+  try {
+    return new URL(soundSrc, import.meta.url).href;
+  } catch {
+    return soundSrc;
+  }
+};
 
 const isAutoplayRestrictionError = (error: unknown) => {
   if (!error || typeof error !== "object") return false;
@@ -55,7 +69,7 @@ const playNativeAudio = async (type: SoundType, options?: PlaySoundOptions) => {
   }
 
   const soundSrc = soundMap[type];
-  const audio = new window.Audio(soundSrc);
+  const audio = new window.Audio(resolveSoundSrc(soundSrc));
   audio.preload = "auto";
   audio.volume = clampVolume(options?.volume ?? 1);
 
@@ -98,14 +112,14 @@ const bindInteractionListeners = () => {
 };
 
 export const useSound = () => {
-  const playSound = useCallback(async (type: SoundType, options?: PlaySoundOptions) => {
+  const playSound = useCallback((type: SoundType, options?: PlaySoundOptions) => {
     bindInteractionListeners();
 
-    const played = await playNativeAudio(type, options);
-    if (played) return true;
-
-    pendingPlaybackQueue.push({ type, options });
-    return false;
+    void playNativeAudio(type, options).then((played) => {
+      if (!played) {
+        pendingPlaybackQueue.push({ type, options });
+      }
+    });
   }, []);
 
   return { playSound };
