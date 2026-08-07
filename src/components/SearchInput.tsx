@@ -95,8 +95,8 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     };
 
     const sizeClasses = {
-      sm: "h-8 px-2 pl-8 text-sm leading-tight",
-      md: "h-10 px-3 pl-10 text-base leading-tight",
+      sm: "h-8 px-2 pl-9 text-sm leading-tight",
+      md: "h-10 px-3 pl-11 text-base leading-tight",
       lg: "h-12 px-4 pl-12 text-lg leading-tight",
     };
 
@@ -106,8 +106,14 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       lg: "w-6 h-6",
     };
 
+    const iconPixelSizes = {
+      sm: 16,
+      md: 18,
+      lg: 20,
+    };
+
     const iconPositionClasses = {
-      sm: "left-2",
+      sm: "left-2.5",
       md: "left-3",
       lg: "left-3.5",
     };
@@ -117,11 +123,15 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         {/* Search Icon */}
         <div
           className={cn(
-            "pointer-events-none absolute top-1/2 -translate-y-1/2 text-neutral-400",
+            "pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-neutral-400",
             iconPositionClasses[size]
           )}
         >
-          <MagnifyingGlassIcon className={iconSizeClasses[size]} />
+          <MagnifyingGlassIcon
+            size={iconPixelSizes[size]}
+            className={cn("block shrink-0", iconSizeClasses[size])}
+            weight="regular"
+          />
         </div>
 
         <input
