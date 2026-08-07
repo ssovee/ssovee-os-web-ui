@@ -31,7 +31,7 @@ describe("hook exports and sound behavior", () => {
     vi.stubGlobal("Audio", AudioMock as unknown as typeof Audio);
 
     const { result } = renderHook(() => useSound());
-    result.current.playSound("notification", { volume: 0.25 });
+    result.current.playSound("notification");
     result.current.playSound("notification");
 
     await Promise.resolve();
@@ -39,5 +39,42 @@ describe("hook exports and sound behavior", () => {
     expect(AudioMock).toHaveBeenCalledWith(expect.stringContaining("notification-tone.wav"));
     expect(AudioMock).toHaveBeenCalledTimes(2);
     expect(play).toHaveBeenCalledTimes(2);
+  });
+
+  it("uses different asset paths based on the requested sound type", async () => {
+    const play = vi.fn().mockResolvedValue(undefined);
+    const calls: string[] = [];
+
+    const AudioMock = vi.fn(function (
+      this: { src: string; play: typeof play; currentTime: number; volume: number; preload: string },
+      src: string,
+    ) {
+      this.src = src;
+      calls.push(src);
+      this.play = play;
+      this.currentTime = 0;
+      this.volume = 1;
+      this.preload = "none";
+    });
+
+    vi.stubGlobal("Audio", AudioMock as unknown as typeof Audio);
+
+    const { result } = renderHook(() => useSound());
+    result.current.playSound("click");
+    result.current.playSound("error");
+    result.current.playSound("success");
+    result.current.playSound("alert");
+    result.current.playSound("notification");
+    result.current.playSound("swipe");
+
+    await Promise.resolve();
+
+    expect(calls).toHaveLength(6);
+    expect(calls[0]).toContain("click-tone.wav");
+    expect(calls[1]).toContain("error-tone.wav");
+    expect(calls[2]).toContain("success-tone.wav");
+    expect(calls[3]).toContain("error-tone.wav");
+    expect(calls[4]).toContain("notification-tone.wav");
+    expect(calls[5]).toContain("swipe-tone.wav");
   });
 });

@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   loader: {
-    ".wav": "file",
+    ".wav": "dataurl",
   },
   external: ["react", "react-dom", "@phosphor-icons/react"],
   outDir: "dist",
