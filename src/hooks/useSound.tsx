@@ -32,6 +32,15 @@ type PendingPlayback = {
   options?: PlaySoundOptions;
 };
 
+const fallbackToneMap: Record<SoundType, { frequency: number; durationMs: number }> = {
+  click: { frequency: 900, durationMs: 70 },
+  swipe: { frequency: 740, durationMs: 90 },
+  success: { frequency: 660, durationMs: 140 },
+  notification: { frequency: 580, durationMs: 130 },
+  error: { frequency: 260, durationMs: 180 },
+  alert: { frequency: 300, durationMs: 170 },
+};
+
 let pendingPlaybackQueue: PendingPlayback[] = [];
 let interactionListenersBound = false;
 
@@ -80,6 +89,45 @@ const isAutoplayRestrictionError = (error: unknown) => {
   );
 };
 
+const playFallbackTone = (type: SoundType, volume: number) => {
+  if (typeof window === "undefined") return false;
+
+  const Ctx = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  if (!Ctx) return false;
+
+  try {
+    const context = new Ctx();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    const { frequency, durationMs } = fallbackToneMap[type];
+
+    oscillator.type = type === "error" || type === "alert" ? "square" : "sine";
+    oscillator.frequency.value = frequency;
+
+    const now = context.currentTime;
+    const end = now + durationMs / 1000;
+    const safeVolume = Math.min(0.12, Math.max(0.01, volume * 0.08));
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(safeVolume, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, end);
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+
+    oscillator.start(now);
+    oscillator.stop(end);
+
+    oscillator.onended = () => {
+      void context.close();
+    };
+
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const playNativeAudio = async (type: SoundType, options?: PlaySoundOptions) => {
   if (typeof window === "undefined" || typeof window.Audio === "undefined") {
     return false;
@@ -98,10 +146,15 @@ const playNativeAudio = async (type: SoundType, options?: PlaySoundOptions) => {
     await audio.play();
     return true;
   } catch (err) {
-    if (!isAutoplayRestrictionError(err)) {
+    if (isAutoplayRestrictionError(err)) {
+      return false;
+    }
+
+    const fallbackPlayed = playFallbackTone(type, clampVolume(options?.volume ?? 1));
+    if (!fallbackPlayed) {
       console.error("Sound playback failed:", err);
     }
-    return false;
+    return fallbackPlayed;
   }
 };
 

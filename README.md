@@ -75,7 +75,7 @@ const app = {
 
 export function NotesWindow() {
   return (
-    <WindowWithoutSideMenu app={app} defaultSize={{ width: 420, height: 320 }}>
+    <WindowWithoutSideMenu app={app} defaultSize={ { width: 420, height: 320 } }>
       <Typography variant="h6">Notes</Typography>
     </WindowWithoutSideMenu>
   );
@@ -102,15 +102,15 @@ export function SettingsWindow() {
   return (
     <WindowWithSideMenu
       app={app}
-      defaultSize={{ width: 720, height: 500 }}
-      actionButtons={{ title: "Save", onClick: () => console.log("Saved") }}
-      menu={{
+      defaultSize={ { width: 720, height: 500 } }
+      actionButtons={ { title: "Save", onClick: () => console.log("Saved") } }
+      menu={ {
         title: "Navigation",
         items: [
           { title: "Profile", icon: "👤", onClick: () => console.log("Profile"), isActive: true },
           { title: "Security", icon: "🔒", onClick: () => console.log("Security") },
         ],
-      }}
+      } }
     >
       <Typography variant="h6">Settings</Typography>
       <Button variant="primary">Update</Button>
@@ -126,7 +126,7 @@ import { Skeleton } from "ssovee-os-web-ui";
 
 export function LoadingState() {
   return (
-    <div style={{ display: "grid", gap: 12 }}>
+    <div style={ { display: "grid", gap: 12 } }>
       <Skeleton variant="text" lines={3} />
       <Skeleton variant="avatar" className="h-12 w-12" />
       <Skeleton variant="image" className="h-40" />
