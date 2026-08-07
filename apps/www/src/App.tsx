@@ -13,6 +13,7 @@ import {
   ImageWithPlaceholder,
   Input,
   Loading,
+  Skeleton,
   Modal,
   Pagination,
   Progress,
@@ -50,6 +51,7 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'toggle', name: 'Toggle' },
   { id: 'dropdown', name: 'Dropdown' },
   { id: 'loading', name: 'Loading' },
+  { id: 'skeleton', name: 'Skeleton' },
   { id: 'toast', name: 'Toast' },
   { id: 'alert', name: 'Alert' },
   { id: 'modal', name: 'Modal' },
@@ -138,6 +140,13 @@ const PROP_MATRIX: Record<string, PropRow[]> = {
     { prop: 'size', type: 'sm | md | lg | xl', defaultValue: 'md', description: 'Loader scale.' },
     { prop: 'text', type: 'string', defaultValue: 'Loading...', description: 'Status label below loader.' },
     { prop: 'fullScreen', type: 'boolean', defaultValue: 'false', description: 'Shows centered overlay loader.' },
+    { prop: 'className', type: 'string', defaultValue: 'undefined', description: 'Custom wrapper classes.' },
+  ],
+  Skeleton: [
+    { prop: 'variant', type: 'text | avatar | image | card | rect', defaultValue: 'text', description: 'Preset skeleton pattern.' },
+    { prop: 'lines', type: 'number', defaultValue: '3', description: 'Number of lines for text/card variants.' },
+    { prop: 'animate', type: 'boolean', defaultValue: 'true', description: 'Enables pulse animation.' },
+    { prop: 'lineClassName', type: 'string', defaultValue: 'undefined', description: 'Custom classes for text/card lines.' },
     { prop: 'className', type: 'string', defaultValue: 'undefined', description: 'Custom wrapper classes.' },
   ],
   Toast: [
@@ -756,6 +765,53 @@ function App() {
                   </>
                 ),
                 code: '<Loading fullScreen variant="spinner" size="xl" text="Loading fullscreen..." />',
+              },
+            ]}
+          />
+        </section>
+
+        <section id="skeleton" className="docs-section">
+          <DemoShowcase
+            title="Skeleton"
+            description="Reusable skeleton placeholders for text, avatars, images, cards, and generic rectangular loading states."
+            variants={[
+              {
+                label: 'COMMON PATTERNS',
+                preview: (
+                  <div className="preview-col full-row">
+                    <div className="skeleton-row">
+                      <Skeleton variant="avatar" className="h-12 w-12" />
+                      <div className="skeleton-copy">
+                        <Skeleton variant="text" lines={2} />
+                      </div>
+                    </div>
+                    <Skeleton variant="image" className="h-44 rounded-xl" />
+                    <Skeleton variant="rect" className="h-11 rounded-lg" />
+                  </div>
+                ),
+                code: '<Skeleton variant="text|avatar|image|card|rect" />',
+              },
+              {
+                label: 'TEXT + CARD',
+                preview: (
+                  <div className="preview-col full-row">
+                    <Skeleton variant="text" lines={4} />
+                    <Skeleton variant="card" lines={4} />
+                  </div>
+                ),
+                code: '<Skeleton variant="text" lines={4} />\n<Skeleton variant="card" lines={4} />',
+              },
+              {
+                label: 'LIGHT / DARK',
+                preview: (
+                  <div className="preview-col full-row">
+                    <Typography variant="p" size="sm" color="neutral-300">
+                      Skeleton uses design-system surface tokens, so it adapts automatically when the global theme switches between light and dark.
+                    </Typography>
+                    <Skeleton variant="card" animate={false} />
+                  </div>
+                ),
+                code: '<Skeleton variant="card" animate={false} />',
               },
             ]}
           />

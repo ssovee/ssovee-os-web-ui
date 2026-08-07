@@ -59,7 +59,6 @@ export function Example() {
 
 ### Simple window
 
-{% raw %}
 ```tsx
 import { WindowWithoutSideMenu, Typography } from "ssovee-os-web-ui";
 
@@ -82,11 +81,9 @@ export function NotesWindow() {
   );
 }
 ```
-{% endraw %}
 
 ### Window with sidebar menu
 
-{% raw %}
 ```tsx
 import { WindowWithSideMenu, Typography, Button } from "ssovee-os-web-ui";
 
@@ -121,7 +118,23 @@ export function SettingsWindow() {
   );
 }
 ```
-{% endraw %}
+
+## Skeleton loader
+
+```tsx
+import { Skeleton } from "ssovee-os-web-ui";
+
+export function LoadingState() {
+  return (
+    <div style={{ display: "grid", gap: 12 }}>
+      <Skeleton variant="text" lines={3} />
+      <Skeleton variant="avatar" className="h-12 w-12" />
+      <Skeleton variant="image" className="h-40" />
+      <Skeleton variant="card" lines={4} />
+    </div>
+  );
+}
+```
 
 ## Plugin playground
 
@@ -173,6 +186,7 @@ The package exports these components and types for external use:
 - `Dropdown`
 - `DropdownOption`
 - `Loading`
+- `Skeleton`
 - `Toast`
 - `Alert`
 - `Modal`

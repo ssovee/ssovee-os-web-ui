@@ -38,6 +38,10 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 
     const { addShortcutListener, removeShortcutListener, formatKeys, getShortcutByCommand } = useShortcutFormatter();
 
+    useEffect(() => {
+      setSearchValue(value ?? "");
+    }, [value]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
       setSearchValue(newValue);
@@ -91,9 +95,9 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     };
 
     const sizeClasses = {
-      sm: "h-8 px-2 pl-8 text-sm",
-      md: "h-10 px-3 pl-10 text-base",
-      lg: "h-12 px-4 pl-12 text-lg",
+      sm: "h-8 px-2 pl-8 text-sm leading-tight",
+      md: "h-10 px-3 pl-10 text-base leading-tight",
+      lg: "h-12 px-4 pl-12 text-lg leading-tight",
     };
 
     const iconSizeClasses = {
@@ -102,10 +106,21 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       lg: "w-6 h-6",
     };
 
+    const iconPositionClasses = {
+      sm: "left-2",
+      md: "left-3",
+      lg: "left-3.5",
+    };
+
     return (
-      <div className="relative">
+      <div className="relative w-full min-w-0">
         {/* Search Icon */}
-        <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400">
+        <div
+          className={cn(
+            "pointer-events-none absolute top-1/2 -translate-y-1/2 text-neutral-400",
+            iconPositionClasses[size]
+          )}
+        >
           <MagnifyingGlassIcon className={iconSizeClasses[size]} />
         </div>
 
@@ -118,9 +133,10 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
           className={cn(
             baseClasses,
             variantClasses[variant],
+            "w-full min-w-0",
             sizeClasses[size],
             showClearButton && searchValue ? "pr-10" : "",
-            className
+            className,
           )}
           {...props}
         />
@@ -129,7 +145,9 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         {showClearButton && searchValue && (
           <button
             onClick={handleClear}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors"
+            aria-label="Clear search"
+            type="button"
           >
             <svg className={iconSizeClasses[size]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

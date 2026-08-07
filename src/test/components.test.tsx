@@ -11,6 +11,7 @@ import Checkbox from "../components/Checkbox";
 import Toggle from "../components/Toggle";
 import Dropdown from "../components/Dropdown";
 import Loading from "../components/Loading";
+import Skeleton from "../components/Skeleton";
 import Toast from "../components/Toast";
 import Alert from "../components/Alert";
 import Modal from "../components/Modal";
@@ -167,6 +168,23 @@ describe("component smoke tests", () => {
   it("renders Loading", () => {
     render(<Loading variant="spinner" text="Loading" />);
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  });
+
+  it("renders Skeleton variants", () => {
+    const { container } = render(
+      <div>
+        <Skeleton variant="text" lines={2} data-testid="sk-text" />
+        <Skeleton variant="avatar" data-testid="sk-avatar" />
+        <Skeleton variant="image" data-testid="sk-image" />
+        <Skeleton variant="card" data-testid="sk-card" />
+      </div>
+    );
+
+    expect(screen.getByTestId("sk-text")).toBeInTheDocument();
+    expect(screen.getByTestId("sk-avatar")).toBeInTheDocument();
+    expect(screen.getByTestId("sk-image")).toBeInTheDocument();
+    expect(screen.getByTestId("sk-card")).toBeInTheDocument();
+    expect(container.querySelectorAll("[aria-hidden='true']").length).toBeGreaterThan(0);
   });
 
   it("renders Toast and close button", () => {

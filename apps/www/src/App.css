@@ -164,6 +164,10 @@
   align-items: center;
 }
 
+.demo-preview > * {
+  min-width: 0;
+}
+
 .demo-code {
   margin: 0;
   padding: 16px 20px;
@@ -252,6 +256,21 @@
   align-items: center;
 }
 
+.inline-stack > * {
+  max-width: 100%;
+}
+
+.skeleton-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.skeleton-copy {
+  flex: 1;
+  min-width: 0;
+}
+
 .divider-group {
   align-items: stretch;
   min-height: 56px;
@@ -313,5 +332,13 @@
 
   .demo-tabs {
     overflow-x: auto;
+  }
+
+  .demo-preview {
+    align-items: stretch;
+  }
+
+  .skeleton-row {
+    align-items: flex-start;
   }
 }
