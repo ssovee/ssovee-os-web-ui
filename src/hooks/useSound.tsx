@@ -27,38 +27,85 @@ const soundMap: Record<SoundType, string> = {
   swipe: swipeTone,
 };
 
-const audioCache = new Map<SoundType, HTMLAudioElement>();
+type PendingPlayback = {
+  type: SoundType;
+  options?: PlaySoundOptions;
+};
+
+let pendingPlaybackQueue: PendingPlayback[] = [];
+let interactionListenersBound = false;
 
 const clampVolume = (value: number) => Math.min(1, Math.max(0, value));
 
+const isAutoplayRestrictionError = (error: unknown) => {
+  if (!error || typeof error !== "object") return false;
+
+  const maybeError = error as { name?: string; message?: string };
+  const message = maybeError.message?.toLowerCase() ?? "";
+  return (
+    maybeError.name === "NotAllowedError" ||
+    message.includes("gesture") ||
+    message.includes("user")
+  );
+};
+
+const playNativeAudio = async (type: SoundType, options?: PlaySoundOptions) => {
+  if (typeof window === "undefined" || typeof window.Audio === "undefined") {
+    return false;
+  }
+
+  const soundSrc = soundMap[type];
+  const audio = new window.Audio(soundSrc);
+  audio.preload = "auto";
+  audio.volume = clampVolume(options?.volume ?? 1);
+
+  if (options?.restart !== false) {
+    audio.currentTime = 0;
+  }
+
+  try {
+    await audio.play();
+    return true;
+  } catch (err) {
+    if (!isAutoplayRestrictionError(err)) {
+      console.error("Sound playback failed:", err);
+    }
+    return false;
+  }
+};
+
+const flushPendingQueue = () => {
+  if (pendingPlaybackQueue.length === 0) return;
+
+  const items = pendingPlaybackQueue;
+  pendingPlaybackQueue = [];
+
+  items.forEach(({ type, options }) => {
+    void playNativeAudio(type, options);
+  });
+};
+
+const bindInteractionListeners = () => {
+  if (interactionListenersBound || typeof window === "undefined") return;
+
+  interactionListenersBound = true;
+  const unlockAndFlush = () => {
+    flushPendingQueue();
+  };
+
+  window.addEventListener("pointerdown", unlockAndFlush, { passive: true });
+  window.addEventListener("keydown", unlockAndFlush, { passive: true });
+};
+
 export const useSound = () => {
   const playSound = useCallback(async (type: SoundType, options?: PlaySoundOptions) => {
-    if (typeof window === "undefined" || typeof window.Audio === "undefined") {
-      return false;
-    }
+    bindInteractionListeners();
 
-    const soundSrc = soundMap[type];
-    let audio = audioCache.get(type);
+    const played = await playNativeAudio(type, options);
+    if (played) return true;
 
-    if (!audio) {
-      audio = new window.Audio(soundSrc);
-      audio.preload = "auto";
-      audioCache.set(type, audio);
-    }
-
-    audio.volume = clampVolume(options?.volume ?? 1);
-
-    if (options?.restart !== false) {
-      audio.currentTime = 0;
-    }
-
-    try {
-      await audio.play();
-      return true;
-    } catch (err) {
-      console.error("Sound playback failed:", err);
-      return false;
-    }
+    pendingPlaybackQueue.push({ type, options });
+    return false;
   }, []);
 
   return { playSound };

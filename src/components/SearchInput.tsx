@@ -1,6 +1,5 @@
 import React, { useImperativeHandle, useRef, useCallback, useEffect } from "react";
 import { cn } from "../utils/helpers";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import useShortcutFormatter from "../hooks/useShortcutFormatter";
 
 export interface SearchInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
@@ -25,6 +24,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       className,
       value,
       onChange,
+      style,
       enableKeyboardShortcuts = false,
       isActive = true,
       ...props
@@ -95,9 +95,9 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
     };
 
     const sizeClasses = {
-      sm: "h-8 px-2 pl-9 text-sm leading-tight",
-      md: "h-10 px-3 pl-11 text-base leading-tight",
-      lg: "h-12 px-4 pl-12 text-lg leading-tight",
+      sm: "h-8 text-sm leading-tight",
+      md: "h-10 text-base leading-tight",
+      lg: "h-12 text-lg leading-tight",
     };
 
     const iconSizeClasses = {
@@ -118,6 +118,12 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       lg: "left-3.5",
     };
 
+    const inputPaddings = {
+      sm: { left: "2.25rem", right: "0.5rem" },
+      md: { left: "2.75rem", right: "0.75rem" },
+      lg: { left: "3rem", right: "1rem" },
+    };
+
     return (
       <div className="relative w-full min-w-0">
         {/* Search Icon */}
@@ -127,11 +133,22 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             iconPositionClasses[size]
           )}
         >
-          <MagnifyingGlassIcon
-            size={iconPixelSizes[size]}
+          <svg
             className={cn("block shrink-0", iconSizeClasses[size])}
-            weight="regular"
-          />
+            width={iconPixelSizes[size]}
+            height={iconPixelSizes[size]}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20L16.65 16.65" />
+          </svg>
         </div>
 
         <input
@@ -145,9 +162,13 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             variantClasses[variant],
             "w-full min-w-0",
             sizeClasses[size],
-            showClearButton && searchValue ? "pr-10" : "",
             className,
           )}
+          style={{
+            paddingLeft: inputPaddings[size].left,
+            paddingRight: showClearButton && searchValue ? "2.5rem" : inputPaddings[size].right,
+            ...style,
+          }}
           {...props}
         />
 

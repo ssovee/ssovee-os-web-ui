@@ -35,7 +35,7 @@ describe("hook exports and sound behavior", () => {
     const secondPlay = await result.current.playSound("notification");
 
     expect(AudioMock).toHaveBeenCalledWith(expect.stringContaining("notification-tone.wav"));
-    expect(AudioMock).toHaveBeenCalledTimes(1);
+    expect(AudioMock).toHaveBeenCalledTimes(2);
     expect(play).toHaveBeenCalledTimes(2);
     expect(firstPlay).toBe(true);
     expect(secondPlay).toBe(true);
