@@ -1,4 +1,9 @@
 import { useCallback } from "react";
+import clickTone from "../assets/sounds/click-tone.wav";
+import errorTone from "../assets/sounds/error-tone.wav";
+import notificationTone from "../assets/sounds/notification-tone.wav";
+import successTone from "../assets/sounds/success-tone.wav";
+import swipeTone from "../assets/sounds/swipe-tone.wav";
 
 export type SoundType =
   | "click"
@@ -14,12 +19,12 @@ export interface PlaySoundOptions {
 }
 
 const soundMap: Record<SoundType, string> = {
-  click: new URL("../assets/sounds/click-tone.wav", import.meta.url).href,
-  alert: new URL("../assets/sounds/error-tone.wav", import.meta.url).href,
-  notification: new URL("../assets/sounds/notification-tone.wav", import.meta.url).href,
-  error: new URL("../assets/sounds/error-tone.wav", import.meta.url).href,
-  success: new URL("../assets/sounds/success-tone.wav", import.meta.url).href,
-  swipe: new URL("../assets/sounds/swipe-tone.wav", import.meta.url).href,
+  click: clickTone,
+  alert: errorTone,
+  notification: notificationTone,
+  error: errorTone,
+  success: successTone,
+  swipe: swipeTone,
 };
 
 type PendingPlayback = {
@@ -31,6 +36,18 @@ let pendingPlaybackQueue: PendingPlayback[] = [];
 let interactionListenersBound = false;
 
 const clampVolume = (value: number) => Math.min(1, Math.max(0, value));
+
+const getAssetUrl = (asset: unknown) => {
+  if (typeof asset === "string") return asset;
+
+  if (asset && typeof asset === "object") {
+    const record = asset as Record<string, unknown>;
+    const candidate = record.default ?? record.src ?? record.url ?? record.href;
+    if (typeof candidate === "string") return candidate;
+  }
+
+  return "";
+};
 
 const resolveSoundSrc = (soundSrc: string) => {
   if (!soundSrc) return soundSrc;
@@ -68,7 +85,7 @@ const playNativeAudio = async (type: SoundType, options?: PlaySoundOptions) => {
     return false;
   }
 
-  const soundSrc = soundMap[type];
+  const soundSrc = getAssetUrl(soundMap[type]);
   const audio = new window.Audio(resolveSoundSrc(soundSrc));
   audio.preload = "auto";
   audio.volume = clampVolume(options?.volume ?? 1);
