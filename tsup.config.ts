@@ -6,6 +6,9 @@ export default defineConfig({
   dts: true,
   clean: true,
   sourcemap: true,
+  loader: {
+    ".wav": "file",
+  },
   external: ["react", "react-dom", "@phosphor-icons/react"],
   outDir: "dist",
   splitting: false,

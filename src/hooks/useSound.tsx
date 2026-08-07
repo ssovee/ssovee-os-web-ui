@@ -1,4 +1,9 @@
 import { useCallback } from "react";
+import clickTone from "../assets/sounds/click-tone.wav";
+import errorTone from "../assets/sounds/error-tone.wav";
+import notificationTone from "../assets/sounds/notification-tone.wav";
+import successTone from "../assets/sounds/success-tone.wav";
+import swipeTone from "../assets/sounds/swipe-tone.wav";
 
 type SoundType =
   | "click"
@@ -9,12 +14,12 @@ type SoundType =
   | "swipe";
 
 const soundMap: Record<SoundType, string> = {
-  click: "/sounds/click-tone.wav",
-  alert: "/sounds/error-tone.wav",
-  notification: "/sounds/notification-tone.wav",
-  error: "/sounds/error-tone.wav",
-  success: "/sounds/success-tone.wav",
-  swipe: "/sounds/swipe-tone.wav",
+  click: clickTone,
+  alert: errorTone,
+  notification: notificationTone,
+  error: errorTone,
+  success: successTone,
+  swipe: swipeTone,
 };
 
 export const useSound = () => {
