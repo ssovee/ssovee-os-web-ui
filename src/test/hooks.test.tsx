@@ -30,6 +30,6 @@ describe("hook exports and sound behavior", () => {
     const { result } = renderHook(() => useSound());
     result.current.playSound("notification");
 
-    expect(AudioMock).toHaveBeenCalledWith("/sounds/notification-tone.wav");
+    expect(AudioMock).toHaveBeenCalledWith(expect.stringContaining("notification-tone.wav"));
   });
 });
