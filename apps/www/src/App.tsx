@@ -37,6 +37,24 @@ import {
 } from 'ssovee-os-web-ui'
 import './App.css'
 
+type ThemeMode = 'light' | 'dark'
+
+const THEME_STORAGE_KEY = 'ssovee-demo-theme'
+
+const getInitialTheme = (): ThemeMode => {
+  if (typeof window === 'undefined') {
+    return 'light'
+  }
+
+  const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
+
+  if (storedTheme === 'light' || storedTheme === 'dark') {
+    return storedTheme
+  }
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 type ComponentItem = {
   id: string
   name: string
@@ -334,6 +352,7 @@ function DemoShowcase({ title, description, variants }: { title: string; descrip
 
 function App() {
   const [componentFilter, setComponentFilter] = useState('')
+  const [theme, setTheme] = useState<ThemeMode>(getInitialTheme)
   const [activeSection, setActiveSection] = useState(() => {
     if (typeof window === 'undefined') return ''
     return window.location.hash.slice(1) || ''
@@ -368,6 +387,17 @@ function App() {
   }, [activeSection])
 
   useEffect(() => {
+    if (typeof document === 'undefined') {
+      return
+    }
+
+    const root = document.documentElement
+    root.classList.toggle('dark', theme === 'dark')
+    root.dataset.theme = theme
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme)
+  }, [theme])
+
+  useEffect(() => {
     const handleHashChange = () => {
       setActiveSection(window.location.hash.slice(1))
     }
@@ -397,8 +427,18 @@ function App() {
     <div className="layout">
       <aside className="sidebar">
         <div className="brand">
-          <h1>SSOVEE UI</h1>
-          <p>Variants, all props, live demos, and code snippets.</p>
+          <div>
+            <h1>SSOVEE UI</h1>
+            <p>Variants, all props, live demos, and code snippets.</p>
+          </div>
+          <button
+            type="button"
+            className="theme-toggle"
+            aria-pressed={theme === 'dark'}
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+          >
+            {theme === 'dark' ? '☀ Light' : '🌙 Dark'}
+          </button>
         </div>
 
         <input
@@ -419,8 +459,11 @@ function App() {
 
       <main className="content">
         <header className="hero">
-          <h1>All Components</h1>
-          <p>Each section now includes broader prop coverage and all valid variants for the component.</p>
+          <div>
+            <h1>All Components</h1>
+            <p>Each section now includes broader prop coverage and all valid variants for the component.</p>
+          </div>
+          <div className="hero-badge">{theme === 'dark' ? 'Dark preview' : 'Light preview'}</div>
         </header>
 
         <section id="button" className="docs-section">

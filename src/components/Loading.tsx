@@ -1,6 +1,7 @@
 import React from "react";
 import { cn } from "../utils/helpers";
 import ImageWithPlaceholder from "./ImageWithPlaceholder";
+import loaderGif from "../assets/Loader.gif";
 
 export interface LoadingProps {
   variant?: "spinner" | "dots" | "pulse" | "image";
@@ -56,7 +57,7 @@ const Loading: React.FC<LoadingProps> = ({
 
   const renderImage = () => (
     <ImageWithPlaceholder
-      src="/app-assets/Loader.gif"
+      src={loaderGif}
       alt="Loader"
       width={imageSizes[size]}
       height={imageSizes[size]}

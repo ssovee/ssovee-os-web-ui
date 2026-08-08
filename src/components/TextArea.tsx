@@ -30,9 +30,9 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const baseClasses = "transition-all duration-200 focus:outline-none placeholder:text-neutral-300 rounded-[6px]";
     
     const variantClasses = {
-      default: "bg-primary border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      filled: "bg-surface-4 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      outline: "bg-transparent border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      default: "bg-primary text-neutral-500 border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      filled: "bg-surface-4 text-neutral-500 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      outline: "bg-transparent text-neutral-500 border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
     };
 
     const sizeClasses = {

@@ -11,6 +11,20 @@
   --color-brand-color: rgb(var(--ssovee-brand-color) / 1);
   --color-border-1: rgb(var(--ssovee-border-1) / 1);
   --color-muted: rgb(var(--ssovee-muted) / 1);
+  --color-neutral-100: rgb(var(--ssovee-neutral-100) / 1);
+  --color-neutral-200: rgb(var(--ssovee-neutral-200) / 1);
+  --color-neutral-300: rgb(var(--ssovee-neutral-300) / 1);
+  --color-neutral-400: rgb(var(--ssovee-neutral-400) / 1);
+  --color-neutral-500: rgb(var(--ssovee-neutral-500) / 1);
+  --color-neutral-600: rgb(var(--ssovee-neutral-600) / 1);
+  --color-neutral-700: rgb(var(--ssovee-neutral-700) / 1);
+  --color-neutral-800: rgb(var(--ssovee-neutral-800) / 1);
+  --color-neutral-900: rgb(var(--ssovee-neutral-900) / 1);
+  --color-gray-500: rgb(var(--ssovee-gray-500) / 1);
+  --color-gray-600: rgb(var(--ssovee-gray-600) / 1);
+  --color-gray-700: rgb(var(--ssovee-gray-700) / 1);
+  --color-slate-100: rgb(var(--ssovee-slate-100) / 1);
+  --color-slate-900: rgb(var(--ssovee-slate-900) / 1);
 }
 
 @layer base {
@@ -27,7 +41,8 @@
     color: var(--neutral-500);
   }
 
-  :root {
+  :root,
+  :root[data-theme="light"] {
     /* Light Theme Defaults */
     --primary: rgba(216, 216, 216, 0.85);
     --secondary: rgba(252, 252, 252, 0.8);
@@ -62,9 +77,25 @@
     --ssovee-brand-color: 10 132 255;
     --ssovee-border-1: 69 73 85;
     --ssovee-muted: 110 116 135;
+    --ssovee-neutral-100: 255 255 255;
+    --ssovee-neutral-200: 229 236 246;
+    --ssovee-neutral-300: 176 187 204;
+    --ssovee-neutral-400: 108 121 140;
+    --ssovee-neutral-500: 25 33 48;
+    --ssovee-neutral-600: 15 23 42;
+    --ssovee-neutral-700: 10 15 25;
+    --ssovee-neutral-800: 5 9 18;
+    --ssovee-neutral-900: 2 6 12;
+    --ssovee-gray-500: 148 163 184;
+    --ssovee-gray-600: 100 116 139;
+    --ssovee-gray-700: 71 85 105;
+    --ssovee-slate-100: 241 245 249;
+    --ssovee-slate-900: 15 23 42;
+    color-scheme: light;
   }
 
-  .dark {
+  .dark,
+  :root[data-theme="dark"] {
     /* Dark Theme Overrides */
     --primary: rgba(43, 43, 43, 0.2);
     --secondary: rgba(43, 43, 43, 0.7);
@@ -99,6 +130,21 @@
     --ssovee-brand-color: 10 132 255;
     --ssovee-border-1: 235 235 245;
     --ssovee-muted: 128 128 128;
+    --ssovee-neutral-100: 17 24 39;
+    --ssovee-neutral-200: 31 41 55;
+    --ssovee-neutral-300: 55 65 81;
+    --ssovee-neutral-400: 107 114 128;
+    --ssovee-neutral-500: 156 163 175;
+    --ssovee-neutral-600: 209 213 219;
+    --ssovee-neutral-700: 226 232 240;
+    --ssovee-neutral-800: 241 245 249;
+    --ssovee-neutral-900: 255 255 255;
+    --ssovee-gray-500: 107 114 128;
+    --ssovee-gray-600: 156 163 175;
+    --ssovee-gray-700: 209 213 219;
+    --ssovee-slate-100: 226 232 240;
+    --ssovee-slate-900: 2 6 23;
+    color-scheme: dark;
   }
 
   .bg-primary,
