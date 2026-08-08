@@ -53,7 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const filledToneClasses = {
       primary: "bg-brand-color text-white hover:bg-brand-color/90 active:bg-brand-color/80 focus-visible:ring-brand-color/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-brand-color/50 disabled:text-white/80",
-      neutral: "bg-surface-3 text-neutral-500 hover:bg-surface-4 active:bg-surface-4 focus-visible:ring-surface-3/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-surface-3/50",
+      neutral: "bg-surface-3 text-neutral-700 hover:text-neutral-700 active:text-neutral-700 hover:bg-surface-4 active:bg-surface-4 border border-surface-1 focus-visible:ring-surface-3/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-surface-3/50",
       success: "bg-green-500 text-white hover:bg-green-600 active:bg-green-600 focus-visible:ring-green-500/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-green-500/50",
       danger: "bg-red-500 text-white hover:bg-red-600 active:bg-red-600 focus-visible:ring-red-500/50 shadow-sm hover:shadow-md active:shadow-none disabled:bg-red-500/50",
     } as const;

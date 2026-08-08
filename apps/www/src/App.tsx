@@ -1438,8 +1438,8 @@ function App() {
                 label: 'SOURCE TYPES',
                 preview: (
                   <div className="inline-stack">
-                    <ImageWithPlaceholder src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80" fallbackSrc="https://via.placeholder.com/320x180?text=Fallback" alt="Landscape" className="demo-image" />
-                    <ImageWithPlaceholder src={{ src: 'https://images.unsplash.com/photo-1494790108755-2616b612b1f2?w=600&q=80' }} fallbackSrc="https://via.placeholder.com/320x180?text=Fallback+Object+Src" alt="Portrait" className="demo-image" />
+                    <ImageWithPlaceholder src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&q=80" alt="Landscape" className="demo-image" />
+                    <ImageWithPlaceholder src={{ src: '/icons.svg' }} alt="Portrait" className="demo-image" />
                   </div>
                 ),
                 code: '<ImageWithPlaceholder src="..." />\n<ImageWithPlaceholder src={{ src: "..." }} />',
@@ -1448,10 +1448,10 @@ function App() {
                 label: 'FALLBACK',
                 preview: (
                   <div className="inline-stack">
-                    <ImageWithPlaceholder src="" fallbackSrc="https://via.placeholder.com/320x180?text=No+Source" alt="Fallback" className="demo-image" />
+                    <ImageWithPlaceholder src="" alt="Fallback" className="demo-image" />
                   </div>
                 ),
-                code: '<ImageWithPlaceholder src="" fallbackSrc="https://via.placeholder.com/320x180?text=No+Source" alt="Fallback" />',
+                code: '<ImageWithPlaceholder src="" alt="Fallback" />',
               },
             ]}
           />

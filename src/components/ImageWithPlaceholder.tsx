@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "../utils/helpers";
+import fallbackLogo from "../assets/icon-192x192.svg";
 
 type ImageSource = string | { src: string };
 
@@ -11,7 +12,7 @@ export interface ImageWithPlaceholderProps extends Omit<React.ImgHTMLAttributes<
 const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
     src,
     alt,
-    fallbackSrc = "",
+    fallbackSrc = fallbackLogo,
     className,
     onError,
     ...props
@@ -28,7 +29,16 @@ const ImageWithPlaceholder: React.FC<ImageWithPlaceholderProps> = ({
         const trimmed = s.trim();
         if (trimmed === "") return false;
         if (trimmed.startsWith("data:")) return true;
-        if (trimmed.startsWith("/") || trimmed.startsWith("./") || trimmed.startsWith("../")) return true;
+
+        if (trimmed.startsWith("/") || trimmed.startsWith("./") || trimmed.startsWith("../")) {
+            return true;
+        }
+
+        // Bundlers often emit bare relative asset paths like "Loader-ABC123.gif".
+        if (/^[^\s?#]+\.(png|jpe?g|gif|webp|svg|bmp|ico|avif)(\?.*)?(#.*)?$/i.test(trimmed)) {
+            return true;
+        }
+
         try {
             new URL(trimmed);
             return true;
