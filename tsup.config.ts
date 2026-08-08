@@ -7,6 +7,8 @@ export default defineConfig({
   clean: true,
   sourcemap: true,
   loader: {
+    ".svg": "dataurl",
+    ".gif": "dataurl",
     ".wav": "dataurl",
   },
   external: ["react", "react-dom", "@phosphor-icons/react"],
