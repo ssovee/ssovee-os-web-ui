@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback } from "react";
 import clickTone from "../assets/sounds/click-tone.wav";
 import errorTone from "../assets/sounds/error-tone.wav";
 import notificationTone from "../assets/sounds/notification-tone.wav";
@@ -23,13 +23,99 @@ const soundMap: Record<SoundType, string> = {
 };
 
 const DEFAULT_SOUND_TYPE: SoundType = "click";
+const audioBufferCache = new Map<string, Promise<AudioBuffer>>();
+
+let sharedAudioContext: AudioContext | null = null;
 
 const isSoundType = (type: string): type is SoundType => {
   return type in soundMap;
 };
 
 export const useSound = () => {
-  const audioCache = useRef<Partial<Record<SoundType, HTMLAudioElement>>>({});
+  const getAudioContext = () => {
+    if (typeof window === "undefined") {
+      return null;
+    }
+
+    const AudioContextCtor = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+
+    if (!AudioContextCtor) {
+      return null;
+    }
+
+    if (!sharedAudioContext || sharedAudioContext.state === "closed") {
+      sharedAudioContext = new AudioContextCtor();
+    }
+
+    return sharedAudioContext;
+  };
+
+  const loadAudioBuffer = async (source: string) => {
+    const cached = audioBufferCache.get(source);
+
+    if (cached) {
+      return cached;
+    }
+
+    const promise = (async () => {
+      if (typeof fetch !== "function") {
+        throw new Error("Fetch is not available");
+      }
+
+      const response = await fetch(source);
+
+      if (!response.ok) {
+        throw new Error(`Failed to load sound source: ${response.status} ${response.statusText}`);
+      }
+
+      const context = getAudioContext();
+
+      if (!context) {
+        throw new Error("Web Audio API is not available");
+      }
+
+      const arrayBuffer = await response.arrayBuffer();
+      return await context.decodeAudioData(arrayBuffer.slice(0));
+    })().catch((error) => {
+      audioBufferCache.delete(source);
+      throw error;
+    });
+
+    audioBufferCache.set(source, promise);
+    return promise;
+  };
+
+  const playWithAudioBuffer = async (buffer: AudioBuffer) => {
+    const context = getAudioContext();
+
+    if (!context) {
+      throw new Error("Web Audio API is not available");
+    }
+
+    if (context.state === "suspended") {
+      await context.resume();
+    }
+
+    await new Promise<void>((resolve, reject) => {
+      const sourceNode = context.createBufferSource();
+      sourceNode.buffer = buffer;
+      sourceNode.connect(context.destination);
+      sourceNode.onended = () => resolve();
+
+      try {
+        sourceNode.start(0);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const playWithAudioElement = async (source: string) => {
+    const audio = new Audio(source);
+    audio.preload = "auto";
+    audio.currentTime = 0;
+    await audio.play();
+  };
 
   const playSound = useCallback((type: SoundType | string) => {
     if (typeof window === "undefined") {
@@ -43,42 +129,32 @@ export const useSound = () => {
     const src = soundMap[requestedType];
 
     if (!src) {
-      console.error(
-        `Sound playback failed: no source found for "${requestedType}"`
-      );
+      console.error(`Sound playback failed: no source found for "${requestedType}"`);
       return;
     }
 
-    try {
-      let audio = audioCache.current[requestedType];
+    void (async () => {
+      let lastError: unknown;
 
-      if (!audio) {
-        audio = new Audio(src);
-        audio.preload = "auto";
-
-        audioCache.current[requestedType] = audio;
+      if (getAudioContext()) {
+        try {
+          const buffer = await loadAudioBuffer(src);
+          await playWithAudioBuffer(buffer);
+          return;
+        } catch (error) {
+          lastError = error;
+        }
       }
 
-      // Allow the same sound to be played repeatedly.
-      audio.pause();
-      audio.currentTime = 0;
-
-      const playPromise = audio.play();
-
-      if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          console.error(
-            `Sound playback failed for "${requestedType}":`,
-            error
-          );
-        });
+      try {
+        await playWithAudioElement(src);
+        return;
+      } catch (error) {
+        lastError = error;
       }
-    } catch (error) {
-      console.error(
-        `Sound playback failed for "${requestedType}":`,
-        error
-      );
-    }
+
+      console.error(`Sound playback failed for "${requestedType}":`, lastError);
+    })();
   }, []);
 
   return {
