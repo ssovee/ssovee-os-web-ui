@@ -180,12 +180,6 @@
   grid-column: span 12 / span 12;
 }
 
-.col-span-mobile-11,
-.col-span-tablet-11,
-.col-span-desktop-11 {
-  grid-column: span 11 / span 11;
-}
-
 .col-span-mobile-10,
 .col-span-tablet-10,
 .col-span-desktop-10 {
@@ -204,9 +198,7 @@
   grid-column: span 8 / span 8;
 }
 
-.col-span-mobile-7,
-.col-span-tablet-7,
-.col-span-desktop-7 {
+.col-span-mobile-7 {
   grid-column: span 7 / span 7;
 }
 
@@ -214,12 +206,6 @@
 .col-span-tablet-6,
 .col-span-desktop-6 {
   grid-column: span 6 / span 6;
-}
-
-.col-span-mobile-5,
-.col-span-tablet-5,
-.col-span-desktop-5 {
-  grid-column: span 5 / span 5;
 }
 
 .col-span-mobile-4,

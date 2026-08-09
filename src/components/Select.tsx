@@ -54,6 +54,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     };
 
     const widthClasses = fullWidth ? "w-full" : "";
+    const isPlaceholderSelected = Boolean(placeholder) && (value === "" || value === undefined || value === null);
 
     const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
       onChange?.(e.target.value);
@@ -73,6 +74,9 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               baseClasses,
               variantClasses[variant],
+              isPlaceholderSelected && "text-neutral-300",
+              isPlaceholderSelected && variant !== "filled" && "dark:text-[#d7e1ef]",
+              !isPlaceholderSelected && "text-neutral-500",
               sizeClasses[size],
               widthClasses,
               "pr-10",
@@ -101,7 +105,10 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           
           <CaretDownIcon
             size={16}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 pointer-events-none"
+            className={cn(
+              "absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 pointer-events-none",
+              variant !== "filled" && "dark:text-[#d7e1ef]"
+            )}
           />
         </div>
         
