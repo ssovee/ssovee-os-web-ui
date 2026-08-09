@@ -100,14 +100,13 @@ const Dropdown: React.FC<DropdownProps> = ({
             className
           )}
         >
-          <span className={selectedOption ? "text-neutral-500" : cn("text-neutral-300", variant !== "filled" && "dark:text-[#d7e1ef]")}>
+          <span className={selectedOption ? "text-[#506886] dark:text-[#d7e1ef]" : cn("text-[#506886]/60 dark:text-[#d7e1ef]/70", variant !== "filled" && "dark:text-[#d7e1ef]")}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <CaretDownIcon
             size={16}
             className={cn(
-              "text-neutral-400 transition-transform duration-200",
-              variant !== "filled" && "dark:text-[#d7e1ef]",
+              "text-[#506886] transition-transform duration-200 dark:text-[#d7e1ef]",
               isOpen && "rotate-180"
             )}
           />

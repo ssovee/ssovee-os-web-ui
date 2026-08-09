@@ -111,8 +111,8 @@ const Pagination: React.FC<PaginationProps> = ({
           "flex items-center justify-center font-medium transition-all duration-200 rounded-[6px]",
           sizeClasses[size],
           variantClasses[variant],
-          isActive ? activeClasses[variant] : "text-neutral-400 dark:text-[#d7e1ef]",
-          !isActive && "hover:text-neutral-500 dark:hover:text-[#d7e1ef]"
+          isActive ? activeClasses[variant] : "text-[#506886] dark:text-[#d7e1ef]",
+          !isActive && "hover:text-[#3f5976] dark:hover:text-[#d7e1ef]"
         )}
       >
         {page}
@@ -130,7 +130,7 @@ const Pagination: React.FC<PaginationProps> = ({
             "flex items-center justify-center font-medium transition-all duration-200 rounded-[6px]",
             sizeClasses[size],
             variantClasses[variant],
-            "text-neutral-400 hover:text-neutral-500 dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
+            "text-[#506886] hover:text-[#3f5976] dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
           )}
         >
           First
@@ -145,7 +145,7 @@ const Pagination: React.FC<PaginationProps> = ({
             "flex items-center justify-center font-medium transition-all duration-200 rounded-[6px]",
             sizeClasses[size],
             variantClasses[variant],
-            "text-neutral-400 hover:text-neutral-500 dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
+            "text-[#506886] hover:text-[#3f5976] dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
           )}
         >
           <CaretLeftIcon size={16} />
@@ -163,7 +163,7 @@ const Pagination: React.FC<PaginationProps> = ({
             "flex items-center justify-center font-medium transition-all duration-200 rounded-[6px]",
             sizeClasses[size],
             variantClasses[variant],
-            "text-neutral-400 hover:text-neutral-500 dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
+            "text-[#506886] hover:text-[#3f5976] dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
           )}
         >
           <CaretRightIcon size={16} />
@@ -178,7 +178,7 @@ const Pagination: React.FC<PaginationProps> = ({
             "flex items-center justify-center font-medium transition-all duration-200 rounded-[6px]",
             sizeClasses[size],
             variantClasses[variant],
-            "text-neutral-400 hover:text-neutral-500 dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
+            "text-[#506886] hover:text-[#3f5976] dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
           )}
         >
           Last

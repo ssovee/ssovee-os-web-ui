@@ -35,12 +35,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const baseClasses = "transition-all duration-200 focus:outline-none placeholder:text-neutral-300 rounded-[6px]";
+    const baseClasses = "transition-all duration-200 focus:outline-none placeholder:text-[#506886] dark:placeholder:text-[#d7e1ef] rounded-[6px] text-[#506886] dark:text-[#d7e1ef]";
     
     const variantClasses = {
-      default: "bg-primary text-neutral-500 border border-surface-1 placeholder:text-neutral-300 dark:placeholder:text-[#d7e1ef] focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      filled: "bg-surface-4 text-neutral-500 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      outline: "bg-transparent text-neutral-500 border border-surface-1 placeholder:text-neutral-300 dark:placeholder:text-[#d7e1ef] focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      default: "bg-primary border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      filled: "bg-surface-4 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      outline: "bg-transparent border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
     };
 
     const sizeClasses = {
@@ -68,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 dark:text-[#d7e1ef]">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#506886] dark:text-[#d7e1ef]">
               {leftIcon}
             </div>
           )}
@@ -90,7 +90,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           
           {rightIcon && !showSubmitButton && (
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 dark:text-[#d7e1ef]">
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#506886] dark:text-[#d7e1ef]">
               {rightIcon}
             </div>
           )}
@@ -100,7 +100,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               type="button"
               onClick={onSubmit}
               disabled={props.disabled || props.readOnly || !onSubmit}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-300 transition-colors hover:text-neutral-400 dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef] disabled:cursor-not-allowed disabled:opacity-50"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#506886] transition-colors hover:text-[#3f5976] dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef] disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Submit input"
             >
               <ArrowCircleRightIcon size={20} />

@@ -74,9 +74,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               baseClasses,
               variantClasses[variant],
-              isPlaceholderSelected && "text-neutral-300",
-              isPlaceholderSelected && variant !== "filled" && "dark:text-[#d7e1ef]",
-              !isPlaceholderSelected && "text-neutral-500",
+              isPlaceholderSelected ? "text-[#506886]/60 dark:text-[#d7e1ef]/70" : "text-[#506886] dark:text-[#d7e1ef]",
               sizeClasses[size],
               widthClasses,
               "pr-10",
@@ -105,10 +103,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           
           <CaretDownIcon
             size={16}
-            className={cn(
-              "absolute right-3 top-1/2 transform -translate-y-1/2 text-neutral-400 pointer-events-none",
-              variant !== "filled" && "dark:text-[#d7e1ef]"
-            )}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#506886] dark:text-[#d7e1ef] pointer-events-none"
           />
         </div>
         

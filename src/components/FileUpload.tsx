@@ -92,16 +92,14 @@ const FileUpload: React.FC<FileUploadProps> = ({
     lg: "h-32 px-6 text-lg",
   };
 
-  const darkPlaceholderTone = variant !== "filled" ? "dark:text-[#d7e1ef]" : "";
-
   const defaultContent = (
     <div className="flex flex-col items-center justify-center h-full text-center">
-      <UploadIcon size={24} className={cn("text-neutral-400 mb-2", darkPlaceholderTone)} />
-      <Typography variant="p" className={cn("text-sm text-neutral-400", darkPlaceholderTone)}>
+      <UploadIcon size={24} className="text-[#506886] mb-2 dark:text-[#d7e1ef]" />
+      <Typography variant="p" className="text-sm text-[#506886] dark:text-[#d7e1ef]">
         {dragAndDrop ? "Drag and drop files here" : "Click to upload files"}
       </Typography>
       {accept && (
-        <Typography variant="p" className={cn("text-xs text-neutral-300 mt-1", darkPlaceholderTone)}>
+        <Typography variant="p" className="text-xs text-[#506886]/70 dark:text-[#d7e1ef]/70 mt-1">
           Accepted: {accept}
         </Typography>
       )}

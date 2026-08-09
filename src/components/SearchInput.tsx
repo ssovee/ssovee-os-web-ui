@@ -86,12 +86,12 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       ? `${placeholder} (${formatKeys(getShortcutByCommand("focus_search"))})`
       : placeholder;
 
-    const baseClasses = "transition-all duration-200 focus:outline-none rounded-[6px]";
+    const baseClasses = "transition-all duration-200 focus:outline-none rounded-[6px] placeholder:text-[#506886] dark:placeholder:text-[#d7e1ef] text-[#506886] dark:text-[#d7e1ef]";
 
     const variantClasses = {
-      default: "bg-primary text-neutral-500 border border-surface-1 placeholder:text-neutral-300 dark:placeholder:text-[#d7e1ef] focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      filled: "bg-surface-4 text-neutral-500 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      outline: "bg-transparent text-neutral-500 border border-surface-1 placeholder:text-neutral-300 dark:placeholder:text-[#d7e1ef] focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      default: "bg-primary border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      filled: "bg-surface-4 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      outline: "bg-transparent border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
     };
 
     const sizeClasses = {
@@ -129,7 +129,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         {/* Search Icon */}
         <div
           className={cn(
-            "pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-neutral-400 dark:text-[#d7e1ef]",
+            "pointer-events-none absolute top-1/2 z-10 -translate-y-1/2 text-[#506886] dark:text-[#d7e1ef]",
             iconPositionClasses[size]
           )}
         >
@@ -176,7 +176,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         {showClearButton && searchValue && (
           <button
             onClick={handleClear}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#506886] hover:text-[#3f5976] transition-colors dark:text-[#d7e1ef] dark:hover:text-[#d7e1ef]"
             aria-label="Clear search"
             type="button"
           >
