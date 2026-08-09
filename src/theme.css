@@ -53,13 +53,13 @@
     --surface-3: rgba(245, 245, 245, 1);
     --surface-4: rgba(255, 255, 255, 1);
 
-    --neutral-700: rgba(35, 54, 85, 0.65);
-    --neutral-600: rgba(23, 54, 87, 0.85);
-    --neutral-500: rgba(23, 54, 87, 1);
-    --neutral-400: rgba(43, 79, 121, 1);
-    --neutral-300: rgba(88, 113, 145, 1);
-    --neutral-200: rgba(110, 116, 135, 1);
-    --neutral-100: rgba(255, 255, 255, 1);
+    --neutral-700: rgba(44, 58, 76, 1);
+    --neutral-600: rgba(56, 77, 101, 1);
+    --neutral-500: rgba(80, 104, 134, 1);
+    --neutral-400: rgba(96, 118, 145, 1);
+    --neutral-300: rgba(124, 146, 167, 1);
+    --neutral-200: rgba(157, 178, 197, 1);
+    --neutral-100: rgba(250, 251, 253, 1);
 
     --brand-color: rgba(10, 132, 255, 1);
 
@@ -78,12 +78,12 @@
     --ssovee-border-1: 69 73 85;
     --ssovee-muted: 110 116 135;
     --ssovee-neutral-100: 255 255 255;
-    --ssovee-neutral-200: 229 236 246;
-    --ssovee-neutral-300: 176 187 204;
-    --ssovee-neutral-400: 108 121 140;
-    --ssovee-neutral-500: 25 33 48;
-    --ssovee-neutral-600: 15 23 42;
-    --ssovee-neutral-700: 10 15 25;
+    --ssovee-neutral-200: 157 178 197;
+    --ssovee-neutral-300: 122 149 173;
+    --ssovee-neutral-400: 98 123 152;
+    --ssovee-neutral-500: 80 104 134;
+    --ssovee-neutral-600: 48 67 92;
+    --ssovee-neutral-700: 33 44 58;
     --ssovee-neutral-800: 5 9 18;
     --ssovee-neutral-900: 2 6 12;
     --ssovee-gray-500: 148 163 184;
