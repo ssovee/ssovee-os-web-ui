@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { useDeviceSupport, useSound } from "../index";
 import { useDeviceSupport as useDeviceSupportFromSdk, useSound as useSoundFromSdk } from "../sdk";
+import useGridClasses from "../hooks/useGridClasses";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -11,6 +12,18 @@ describe("hook exports and sound behavior", () => {
   it("exports the device and sound hooks from the library entrypoint", () => {
     expect(useDeviceSupport).toBeTypeOf("function");
     expect(useSound).toBeTypeOf("function");
+  });
+
+  it("falls back to the full-width span when no grid span rule is provided", () => {
+    const { result } = renderHook(() =>
+      useGridClasses(
+        { width: 375, height: 812 },
+        { card: {} },
+      ),
+    );
+
+    expect(result.current.deviceType).toBe("mobile");
+    expect(result.current.gridClasses.card).toBe("col-span-mobile-12");
   });
 
   it("exports the hooks through the sdk entrypoint", () => {
