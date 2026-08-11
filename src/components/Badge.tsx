@@ -22,7 +22,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
   ) => {
     const variantClasses = {
       default: "bg-surface-3 text-neutral-400",
-      primary: "bg-brand-color text-neutral-500",
+      primary: "bg-brand-color text-neutral-500 dark:text-white",
       success: "bg-green-500 text-white",
       warning: "bg-yellow-500 text-white",
       danger: "bg-red-500 text-white",

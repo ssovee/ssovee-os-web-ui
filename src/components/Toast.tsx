@@ -71,7 +71,7 @@ const Toast: React.FC<ToastProps> = ({
       case "success":
         return "border-l-green-500 bg-green-50";
       case "warning":
-        return "border-l-yellow-500 bg-yellow-50";
+        return "border-l-yellow-500 bg-yellow-50 dark:text-[#121316]";
       case "info":
         return "border-l-blue-500 bg-blue-50";
       default:
@@ -127,11 +127,27 @@ const Toast: React.FC<ToastProps> = ({
           {/* Content */}
           <div className="flex-1 min-w-0">
             {heading && (
-              <Typography variant="h4" className="text-sm font-medium text-neutral-700 mb-1">
+              <Typography
+                variant="h4"
+                className={cn(
+                  "text-sm font-medium mb-1",
+                  type === "warning"
+                    ? "text-neutral-700 dark:text-[#121316]"
+                    : "text-neutral-700"
+                )}
+              >
                 {heading}
               </Typography>
             )}
-            <Typography variant="p" className="text-sm text-neutral-600 leading-relaxed">
+            <Typography
+              variant="p"
+              className={cn(
+                "text-sm leading-relaxed",
+                type === "warning"
+                  ? "text-neutral-600 dark:text-[#121316]"
+                  : "text-neutral-600"
+              )}
+            >
               {message}
             </Typography>
           </div>

@@ -55,7 +55,7 @@ const Tooltip: React.FC<TooltipProps> = ({
       {isVisible && (
         <div
           className={cn(
-            "absolute z-50 px-2 py-1 text-xs text-white bg-surface-1 rounded shadow-lg whitespace-nowrap",
+            "absolute z-50 px-2 py-1 text-xs tooltip-text bg-surface-1 rounded shadow-lg whitespace-nowrap",
             positionClasses[position],
             className
           )}

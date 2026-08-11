@@ -28,7 +28,7 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
     
     const variantClasses = {
       default: "bg-primary border border-surface-1 focus:border-brand-color focus:ring-brand-color/50 checked:bg-brand-color checked:border-brand-color",
-      filled: "bg-surface-4 border border-surface-4 focus:border-brand-color focus:ring-brand-color/50 checked:bg-brand-color checked:border-brand-color",
+      filled: "bg-surface-4 border border-surface-1 focus:border-brand-color focus:ring-brand-color/50 checked:bg-brand-color checked:border-brand-color",
     };
 
     const sizeClasses = {
@@ -45,6 +45,7 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
               ref={ref}
               type="radio"
               className={cn(
+                "peer",
                 baseClasses,
                 variantClasses[variant],
                 sizeClasses[size],
@@ -57,7 +58,7 @@ const Radio = React.forwardRef<HTMLInputElement, RadioProps>(
             />
             
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-1/2 h-1/2 bg-white rounded-full opacity-0 checked:opacity-100" />
+              <div className="w-1/2 h-1/2 bg-white rounded-full opacity-0 peer-checked:opacity-100" />
             </div>
           </div>
           

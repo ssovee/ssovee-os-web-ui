@@ -8,8 +8,7 @@ export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {
   animate?: boolean;
 }
 
-const basePulseClasses =
-  "bg-surface-1/35 dark:bg-surface-3/20 rounded-md overflow-hidden";
+const basePulseClasses = "skeleton-bg rounded-md overflow-hidden";
 
 const lineWidths = ["w-full", "w-11/12", "w-4/5", "w-3/5"];
 

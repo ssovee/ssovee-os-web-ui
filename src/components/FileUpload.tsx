@@ -92,14 +92,22 @@ const FileUpload: React.FC<FileUploadProps> = ({
     lg: "h-32 px-6 text-lg",
   };
 
+  const defaultTextClasses = variant === "default" || variant === "outline"
+    ? "text-neutral-600"
+    : "text-neutral-600";
+
+  const acceptTextClasses = variant === "default" || variant === "outline"
+    ? "text-xs text-neutral-600"
+    : "text-xs text-neutral-600";
+
   const defaultContent = (
     <div className="flex flex-col items-center justify-center h-full text-center">
-      <UploadIcon size={24} className="text-neutral-400 mb-2" />
-      <Typography variant="p" className="text-sm text-neutral-400">
+      <UploadIcon size={24} className={cn("mb-2", defaultTextClasses)} />
+      <Typography variant="p" className={cn("text-sm", defaultTextClasses)}>
         {dragAndDrop ? "Drag and drop files here" : "Click to upload files"}
       </Typography>
       {accept && (
-        <Typography variant="p" className="text-xs text-neutral-300 mt-1">
+        <Typography variant="p" className={cn(acceptTextClasses, "mt-1")}>
           Accepted: {accept}
         </Typography>
       )}
