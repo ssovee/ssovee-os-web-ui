@@ -187,18 +187,18 @@
     color: #2E3038 !important;
   }
 
-  .dark .input-text-default,
+  /* .dark .input-text-default,
   .dark .input-text-outline,
   .dark .placeholder-light::placeholder,
   .dark .placeholder-default::placeholder,
   .dark .placeholder-outline::placeholder {
     color: #ffffff !important;
-  }
+  } */
 
-  .dark .input-text-filled,
+  /* .dark .input-text-filled,
   .dark .placeholder-filled::placeholder {
     color: rgba(0, 0, 0, 0.65) !important;
-  }
+  } */
 
   .tooltip-text {
     color: #ffffff !important;
