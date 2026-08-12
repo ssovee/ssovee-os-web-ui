@@ -210,12 +210,12 @@
 
   .dark select {
     color-scheme: dark;
-    color: #e5e7eb !important;
+    color: #ffffff !important;
     background-color: var(--primary) !important;
   }
 
   .dark select option {
-    color: #e5e7eb !important;
+    color: #ffffff !important;
     background-color: var(--primary) !important;
   }
 
