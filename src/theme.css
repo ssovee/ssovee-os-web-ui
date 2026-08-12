@@ -197,6 +197,28 @@
     color: #ffffff !important;
   }
 
+  select {
+    color-scheme: light;
+    color: #111827 !important;
+    background-color: #ffffff !important;
+  }
+
+  select option {
+    color: #111827 !important;
+    background-color: #ffffff !important;
+  }
+
+  .dark select {
+    color-scheme: dark;
+    color: #e5e7eb !important;
+    background-color: #1f2937 !important;
+  }
+
+  .dark select option {
+    color: #e5e7eb !important;
+    background-color: #1f2937 !important;
+  }
+
   .tooltip-text {
     color: #ffffff !important;
   }

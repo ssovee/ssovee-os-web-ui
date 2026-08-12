@@ -75,7 +75,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               variantClasses[variant],
               sizeClasses[size],
               widthClasses,
-              "pr-10 text-black placeholder:text-black dark:text-white dark:placeholder:text-white",
+              "pr-10 text-neutral-900 bg-white placeholder:text-neutral-900 dark:text-white dark:bg-slate-900 dark:placeholder:text-white",
               error && "border-red-500 focus:border-red-500 focus:ring-red-500/50",
               className
             )}
