@@ -211,10 +211,12 @@
   .dark select {
     color-scheme: dark;
     color: #e5e7eb !important;
+    background-color: var(--primary) !important;
   }
 
   .dark select option {
     color: #e5e7eb !important;
+    background-color: var(--primary) !important;
   }
 
   .tooltip-text {
