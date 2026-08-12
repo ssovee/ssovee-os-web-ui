@@ -62,7 +62,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className={cn("flex flex-col", fullWidth && "w-full")}>
         {label && (
-          <label className="text-sm font-medium text-neutral-500 mb-1">
+          <label className="text-sm font-medium text-neutral-500 dark:text-white mb-1">
             {label}
           </label>
         )}
@@ -75,7 +75,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               variantClasses[variant],
               sizeClasses[size],
               widthClasses,
-              "pr-10",
+              "pr-10 text-black placeholder:text-black dark:text-white dark:placeholder:text-white",
               error && "border-red-500 focus:border-red-500 focus:ring-red-500/50",
               className
             )}
