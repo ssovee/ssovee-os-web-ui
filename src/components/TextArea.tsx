@@ -53,7 +53,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className={cn("flex flex-col", fullWidth && "w-full")}>
         {label && (
-          <label className="text-sm font-medium text-neutral-500 mb-1">
+          <label className="text-sm font-medium text-neutral-500 dark:text-white mb-1">
             {label}
           </label>
         )}

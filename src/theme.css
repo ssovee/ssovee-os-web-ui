@@ -187,18 +187,15 @@
     color: #2E3038 !important;
   }
 
-  /* .dark .input-text-default,
+  .dark .input-text-default,
   .dark .input-text-outline,
+  .dark .input-text-filled,
   .dark .placeholder-light::placeholder,
   .dark .placeholder-default::placeholder,
-  .dark .placeholder-outline::placeholder {
-    color: #ffffff !important;
-  } */
-
-  /* .dark .input-text-filled,
+  .dark .placeholder-outline::placeholder,
   .dark .placeholder-filled::placeholder {
-    color: rgba(0, 0, 0, 0.65) !important;
-  } */
+    color: #ffffff !important;
+  }
 
   .tooltip-text {
     color: #ffffff !important;
