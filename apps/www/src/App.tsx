@@ -525,7 +525,7 @@ function App() {
                 preview: (
                   <div className="preview-col full-row">
                     <Input variant="default" placeholder="Default input" />
-                    <Input variant="filled" placeholder="Filled input" />
+                    <Input variant="filled" placeholder="Filled input" className="demo-filled-input-dark" />
                     <Input variant="outline" placeholder="Outline input" />
                   </div>
                 ),
@@ -570,7 +570,7 @@ function App() {
                 preview: (
                   <div className="preview-col full-row">
                     <TextArea variant="default" rows={3} placeholder="Default" fullWidth />
-                    <TextArea variant="filled" rows={3} placeholder="Filled" fullWidth />
+                    <TextArea variant="filled" rows={3} placeholder="Filled" fullWidth className="demo-filled-textarea-dark" />
                     <TextArea variant="outline" rows={3} placeholder="Outline" fullWidth />
                   </div>
                 ),
