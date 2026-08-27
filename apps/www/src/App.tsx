@@ -12,6 +12,7 @@ import {
   FileUpload,
   ImageWithPlaceholder,
   Input,
+  JsonEditor,
   Loading,
   Skeleton,
   Modal,
@@ -64,6 +65,7 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'button', name: 'Button' },
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
+  { id: 'json-editor', name: 'JsonEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
   { id: 'toggle', name: 'Toggle' },
@@ -124,6 +126,13 @@ const PROP_MATRIX: Record<string, PropRow[]> = {
     { prop: 'resize', type: 'none | vertical | horizontal | both', defaultValue: 'vertical', description: 'Resize behavior.' },
     { prop: 'label/helperText/error', type: 'string', defaultValue: 'undefined', description: 'Form metadata.' },
     { prop: 'fullWidth', type: 'boolean', defaultValue: 'false', description: 'Expands to container width.' },
+  ],
+  JsonEditor: [
+    { prop: 'value/onChange', type: 'string / (value: string) => void', defaultValue: 'required', description: 'Controlled editor content and change callback.' },
+    { prop: 'language', type: 'EditorProps["language"]', defaultValue: 'json', description: 'Monaco language mode.' },
+    { prop: 'theme', type: 'EditorProps["theme"]', defaultValue: 'light', description: 'Monaco editor theme.' },
+    { prop: 'height', type: 'EditorProps["height"]', defaultValue: '100%', description: 'Editor container height.' },
+    { prop: 'options/className', type: 'EditorProps["options"] / string', defaultValue: 'undefined', description: 'Monaco options and wrapper classes.' },
   ],
   Select: [
     { prop: 'options', type: 'SelectOption[]', defaultValue: 'required', description: 'Option list.' },
@@ -359,6 +368,11 @@ function App() {
   })
   const [name, setName] = useState('Shivam')
   const [description, setDescription] = useState('A reusable design system component library.')
+  const [jsonValue, setJsonValue] = useState(`{
+  "name": "SSOVEE UI",
+  "version": "0.1.70",
+  "ready": true
+}`)
   const [selectValue, setSelectValue] = useState('react')
   const [dropdownValue, setDropdownValue] = useState('weekly')
   const [checked, setChecked] = useState(true)
@@ -601,6 +615,34 @@ function App() {
                   />
                 ),
                 code: '<TextArea label="Description" value={value} onChange={...} error="..." helperText="..." fullWidth />',
+              },
+            ]}
+          />
+        </section>
+
+        <section id="json-editor" className="docs-section">
+          <DemoShowcase
+            title="JsonEditor"
+            description="A controlled Monaco JSON editor with language, theme, height, options, and className support."
+            variants={[
+              {
+                label: 'CONTROLLED JSON',
+                preview: (
+                  <div className="preview-col full-row">
+                    <JsonEditor
+                      value={jsonValue}
+                      onChange={setJsonValue}
+                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      height="280px"
+                      className="demo-json-editor"
+                      options={{ minimap: { enabled: false }, padding: { top: 12 } }}
+                    />
+                    <Typography variant="span" size="sm" color="neutral-300">
+                      Characters: {jsonValue.length}
+                    </Typography>
+                  </div>
+                ),
+                code: '<JsonEditor value={json} onChange={setJson} theme="light|vs-dark" height="280px" options={{ minimap: { enabled: false } }} />',
               },
             ]}
           />

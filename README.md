@@ -55,6 +55,31 @@ export function Example() {
 }
 ```
 
+## JSON editor
+
+`JsonEditor` is a controlled Monaco editor configured for JSON by default:
+
+```tsx
+import { useState } from "react";
+import { JsonEditor } from "ssovee-os-web-ui";
+
+export function SettingsEditor() {
+  const [value, setValue] = useState('{"enabled":true}');
+
+  return (
+    <JsonEditor
+      value={value}
+      onChange={setValue}
+      theme="light"
+      height="320px"
+      options={{ minimap: { enabled: false } }}
+    />
+  );
+}
+```
+
+Use `theme="vs-dark"` for a dark editor. The component also accepts Monaco `language`, `height`, and `options` props.
+
 ## Window components
 
 ### Simple window
@@ -179,6 +204,7 @@ The package exports these components and types for external use:
 - `Button`
 - `Input`
 - `TextArea`
+- `JsonEditor`
 - `Select`
 - `SelectOption`
 - `Checkbox`

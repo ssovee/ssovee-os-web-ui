@@ -432,6 +432,14 @@ html[data-theme='dark'] .demo-filled-textarea-dark::placeholder,
   border-radius: 8px;
 }
 
+.demo-json-editor {
+  width: 100%;
+  min-height: 280px;
+  overflow: hidden;
+  border: 1px solid var(--demo-border);
+  border-radius: 8px;
+}
+
 @media (max-width: 980px) {
   .layout {
     grid-template-columns: 1fr;
