@@ -67,6 +67,7 @@
     "react-dom": ">=18"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@phosphor-icons/react": ">=2",
     "ua-parser-js": "^2.0.4"
   },
