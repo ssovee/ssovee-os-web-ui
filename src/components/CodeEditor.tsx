@@ -1,7 +1,7 @@
 import Editor, { type EditorProps } from "@monaco-editor/react";
 import React from "react";
 
-export interface JsonEditorProps {
+export interface CodeEditorProps {
   value: string;
   onChange: (value: string) => void;
   language?: EditorProps["language"];
@@ -11,7 +11,9 @@ export interface JsonEditorProps {
   className?: string;
 }
 
-const JsonEditor: React.FC<JsonEditorProps> = ({
+export type JsonEditorProps = CodeEditorProps;
+
+const CodeEditor: React.FC<CodeEditorProps> = ({
   value,
   onChange,
   language = "json",
@@ -34,4 +36,4 @@ const JsonEditor: React.FC<JsonEditorProps> = ({
   );
 };
 
-export default JsonEditor;
+export default CodeEditor;

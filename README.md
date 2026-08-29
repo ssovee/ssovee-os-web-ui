@@ -55,19 +55,21 @@ export function Example() {
 }
 ```
 
-## JSON editor
+## Editors
 
-`JsonEditor` is a controlled Monaco editor configured for JSON by default:
+### CodeEditor
+
+`CodeEditor` is a controlled Monaco editor configured for JSON by default:
 
 ```tsx
 import { useState } from "react";
-import { JsonEditor } from "ssovee-os-web-ui";
+import { CodeEditor } from "ssovee-os-web-ui";
 
 export function SettingsEditor() {
   const [value, setValue] = useState('{"enabled":true}');
 
   return (
-    <JsonEditor
+    <CodeEditor
       value={value}
       onChange={setValue}
       theme="light"
@@ -79,6 +81,30 @@ export function SettingsEditor() {
 ```
 
 Use `theme="vs-dark"` for a dark editor. The component also accepts Monaco `language`, `height`, and `options` props.
+
+### RichEditor
+
+`RichEditor` provides WYSIWYG text editing for rich content and HTML output:
+
+```tsx
+import { useState } from "react";
+import { RichEditor } from "ssovee-os-web-ui";
+
+export function StoryEditor() {
+  const [value, setValue] = useState("<p><strong>Hello</strong> world</p>");
+
+  return (
+    <RichEditor
+      value={value}
+      onChange={setValue}
+      placeholder="Write something rich..."
+      height={220}
+    />
+  );
+}
+```
+
+`RichEditor` supports formatted text output in HTML, along with placeholder, height, and readOnly support.
 
 ## Window components
 
@@ -204,7 +230,8 @@ The package exports these components and types for external use:
 - `Button`
 - `Input`
 - `TextArea`
-- `JsonEditor`
+- `CodeEditor`
+- `RichEditor`
 - `Select`
 - `SelectOption`
 - `Checkbox`

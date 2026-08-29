@@ -6,6 +6,8 @@ import { beforeAll, describe, expect, it, vi } from "vitest";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import TextArea from "../components/TextArea";
+import CodeEditor from "../components/CodeEditor";
+import RichEditor from "../components/RichEditor";
 import Select from "../components/Select";
 import Checkbox from "../components/Checkbox";
 import Toggle from "../components/Toggle";
@@ -87,6 +89,27 @@ describe("component smoke tests", () => {
     await user.type(textArea, "hello world");
 
     expect(textArea).toHaveValue("hello world");
+  });
+
+  it("renders CodeEditor with JSON payload", () => {
+    const { container } = render(
+      <CodeEditor
+        value='{"name":"SSOVEE UI","enabled":true}'
+        onChange={vi.fn()}
+        theme="light"
+        height="180px"
+        className="test-code-editor"
+      />
+    );
+
+    expect(container.querySelector(".test-code-editor")).toBeInTheDocument();
+  });
+
+  it("renders RichEditor and exposes placeholder content", () => {
+    render(<RichEditor value="<p>Hello <strong>world</strong></p>" onChange={vi.fn()} placeholder="Write something rich" />);
+
+    expect(screen.getByText(/hello/i)).toBeInTheDocument();
+    expect(screen.getByText(/world/i)).toBeInTheDocument();
   });
 
   it("renders Card with content", () => {

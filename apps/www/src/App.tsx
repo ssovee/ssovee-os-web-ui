@@ -12,7 +12,8 @@ import {
   FileUpload,
   ImageWithPlaceholder,
   Input,
-  JsonEditor,
+  CodeEditor,
+  RichEditor,
   Loading,
   Skeleton,
   Modal,
@@ -65,7 +66,8 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'button', name: 'Button' },
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
-  { id: 'json-editor', name: 'JsonEditor' },
+  { id: 'json-editor', name: 'CodeEditor' },
+  { id: 'rich-editor', name: 'RichEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
   { id: 'toggle', name: 'Toggle' },
@@ -127,12 +129,19 @@ const PROP_MATRIX: Record<string, PropRow[]> = {
     { prop: 'label/helperText/error', type: 'string', defaultValue: 'undefined', description: 'Form metadata.' },
     { prop: 'fullWidth', type: 'boolean', defaultValue: 'false', description: 'Expands to container width.' },
   ],
-  JsonEditor: [
+  CodeEditor: [
     { prop: 'value/onChange', type: 'string / (value: string) => void', defaultValue: 'required', description: 'Controlled editor content and change callback.' },
     { prop: 'language', type: 'EditorProps["language"]', defaultValue: 'json', description: 'Monaco language mode.' },
     { prop: 'theme', type: 'EditorProps["theme"]', defaultValue: 'light', description: 'Monaco editor theme.' },
     { prop: 'height', type: 'EditorProps["height"]', defaultValue: '100%', description: 'Editor container height.' },
     { prop: 'options/className', type: 'EditorProps["options"] / string', defaultValue: 'undefined', description: 'Monaco options and wrapper classes.' },
+  ],
+  RichEditor: [
+    { prop: 'value/onChange', type: 'string / (value: string) => void', defaultValue: 'required', description: 'Rich text HTML value and change callback.' },
+    { prop: 'placeholder', type: 'string', defaultValue: 'Write something...', description: 'Placeholder text shown in empty editor.' },
+    { prop: 'readOnly', type: 'boolean', defaultValue: 'false', description: 'Prevents editing while keeping content visible.' },
+    { prop: 'height', type: 'number | string', defaultValue: '220', description: 'Editor area height.' },
+    { prop: 'className', type: 'string', defaultValue: 'undefined', description: 'Extra wrapper classes.' },
   ],
   Select: [
     { prop: 'options', type: 'SelectOption[]', defaultValue: 'required', description: 'Option list.' },
@@ -373,6 +382,7 @@ function App() {
   "version": "0.1.70",
   "ready": true
 }`)
+  const [richTextValue, setRichTextValue] = useState('<p><strong>Welcome</strong> to <em>SSOVEE UI</em>.</p>')
   const [selectValue, setSelectValue] = useState('react')
   const [dropdownValue, setDropdownValue] = useState('weekly')
   const [checked, setChecked] = useState(true)
@@ -622,14 +632,14 @@ function App() {
 
         <section id="json-editor" className="docs-section">
           <DemoShowcase
-            title="JsonEditor"
+            title="CodeEditor"
             description="A controlled Monaco JSON editor with language, theme, height, options, and className support."
             variants={[
               {
                 label: 'CONTROLLED JSON',
                 preview: (
                   <div className="preview-col full-row">
-                    <JsonEditor
+                    <CodeEditor
                       value={jsonValue}
                       onChange={setJsonValue}
                       theme={theme === 'dark' ? 'vs-dark' : 'light'}
@@ -642,7 +652,30 @@ function App() {
                     </Typography>
                   </div>
                 ),
-                code: '<JsonEditor value={json} onChange={setJson} theme="light|vs-dark" height="280px" options={{ minimap: { enabled: false } }} />',
+                code: '<CodeEditor value={json} onChange={setJson} theme="light|vs-dark" height="280px" options={{ minimap: { enabled: false } }} />',
+              },
+            ]}
+          />
+        </section>
+
+        <section id="rich-editor" className="docs-section">
+          <DemoShowcase
+            title="RichEditor"
+            description="A rich text editor built with react-quill for formatted writing and content editing."
+            variants={[
+              {
+                label: 'FORMATTED CONTENT',
+                preview: (
+                  <div className="preview-col full-row">
+                    <RichEditor
+                      value={richTextValue}
+                      onChange={setRichTextValue}
+                      placeholder="Write something rich..."
+                      height={220}
+                    />
+                  </div>
+                ),
+                code: '<RichEditor value={value} onChange={setValue} placeholder="Write something rich..." height={220} />',
               },
             ]}
           />
