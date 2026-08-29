@@ -4,7 +4,6 @@ export { default as Button } from "./components/Button";
 export { default as Input } from "./components/Input";
 export { default as TextArea } from "./components/TextArea";
 export { default as CodeEditor } from "./components/CodeEditor";
-export { default as JsonEditor } from "./components/CodeEditor";
 export { default as RichEditor } from "./components/RichEditor";
 export { default as Select } from "./components/Select";
 export { default as Checkbox } from "./components/Checkbox";
