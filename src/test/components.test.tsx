@@ -112,6 +112,14 @@ describe("component smoke tests", () => {
     expect(screen.getByText(/world/i)).toBeInTheDocument();
   });
 
+  it("renders a simple editing toolbar for basic formatting", () => {
+    render(<RichEditor value="<p>Hello</p>" onChange={vi.fn()} placeholder="Write something rich" />);
+
+    expect(screen.getByRole("button", { name: /bold/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /italic/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /bullet list/i })).toBeInTheDocument();
+  });
+
   it("renders Card with content", () => {
     render(<Card>Body</Card>);
     expect(screen.getByText(/body/i)).toBeInTheDocument();

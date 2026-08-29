@@ -382,7 +382,13 @@ function App() {
   "version": "0.1.70",
   "ready": true
 }`)
-  const [richTextValue, setRichTextValue] = useState('<p><strong>Welcome</strong> to <em>SSOVEE UI</em>.</p>')
+  const [richTextValue, setRichTextValue] = useState(`
+    <h1>Getting started</h1>
+    <p>Welcome to the <strong>Simple Editor</strong> template! This template integrates <strong>open source UI components</strong> and Tiptap extensions licensed under <strong>MIT</strong>.</p>
+    <p>Integrate it by following the <a href="https://tiptap.dev/docs" target="_blank" rel="noreferrer">Tiptap UI Components</a> docs or using our CLI tool.</p>
+    <p><code>npx @tiptap/cli init</code></p>
+    <h2>Features</h2>
+  `)
   const [selectValue, setSelectValue] = useState('react')
   const [dropdownValue, setDropdownValue] = useState('weekly')
   const [checked, setChecked] = useState(true)
