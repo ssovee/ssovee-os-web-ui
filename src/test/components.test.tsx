@@ -7,7 +7,6 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import TextArea from "../components/TextArea";
 import CodeEditor from "../components/CodeEditor";
-import RichEditor from "../components/RichEditor";
 import Select from "../components/Select";
 import Checkbox from "../components/Checkbox";
 import Toggle from "../components/Toggle";
@@ -103,21 +102,6 @@ describe("component smoke tests", () => {
     );
 
     expect(container.querySelector(".test-code-editor")).toBeInTheDocument();
-  });
-
-  it("renders RichEditor and exposes placeholder content", () => {
-    render(<RichEditor value="<p>Hello <strong>world</strong></p>" onChange={vi.fn()} placeholder="Write something rich" />);
-
-    expect(screen.getByText(/hello/i)).toBeInTheDocument();
-    expect(screen.getByText(/world/i)).toBeInTheDocument();
-  });
-
-  it("renders a simple editing toolbar for basic formatting", () => {
-    render(<RichEditor value="<p>Hello</p>" onChange={vi.fn()} placeholder="Write something rich" />);
-
-    expect(screen.getByRole("button", { name: /bold/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /italic/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /bullet list/i })).toBeInTheDocument();
   });
 
   it("renders Card with content", () => {

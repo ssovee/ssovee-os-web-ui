@@ -8,12 +8,11 @@ export default defineConfig({
   plugins: [react()],
   base: process.env.GITHUB_PAGES === 'true' ? '/ssovee-os-web-ui/' : '/',
   resolve: {
+    // Ensure linked local packages use the app's React instance.
     dedupe: ['react', 'react-dom'],
     alias: {
       react: path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'node_modules/react'),
       'react-dom': path.resolve(fileURLToPath(new URL('.', import.meta.url)), 'node_modules/react-dom'),
-      'ssovee-os-web-ui': path.resolve(fileURLToPath(new URL('../..', import.meta.url)), 'src/index.ts'),
-      'ssovee-os-web-ui/theme.css': path.resolve(fileURLToPath(new URL('../..', import.meta.url)), 'src/theme.css'),
     },
   },
 })

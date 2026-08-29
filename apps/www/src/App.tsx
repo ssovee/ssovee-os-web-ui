@@ -13,7 +13,6 @@ import {
   ImageWithPlaceholder,
   Input,
   CodeEditor,
-  RichEditor,
   Loading,
   Skeleton,
   Modal,
@@ -67,7 +66,6 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
   { id: 'json-editor', name: 'CodeEditor' },
-  { id: 'rich-editor', name: 'RichEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
   { id: 'toggle', name: 'Toggle' },
@@ -135,13 +133,6 @@ const PROP_MATRIX: Record<string, PropRow[]> = {
     { prop: 'theme', type: 'EditorProps["theme"]', defaultValue: 'light', description: 'Monaco editor theme.' },
     { prop: 'height', type: 'EditorProps["height"]', defaultValue: '100%', description: 'Editor container height.' },
     { prop: 'options/className', type: 'EditorProps["options"] / string', defaultValue: 'undefined', description: 'Monaco options and wrapper classes.' },
-  ],
-  RichEditor: [
-    { prop: 'value/onChange', type: 'string / (value: string) => void', defaultValue: 'required', description: 'Rich text HTML value and change callback.' },
-    { prop: 'placeholder', type: 'string', defaultValue: 'Write something...', description: 'Placeholder text shown in empty editor.' },
-    { prop: 'readOnly', type: 'boolean', defaultValue: 'false', description: 'Prevents editing while keeping content visible.' },
-    { prop: 'height', type: 'number | string', defaultValue: '220', description: 'Editor area height.' },
-    { prop: 'className', type: 'string', defaultValue: 'undefined', description: 'Extra wrapper classes.' },
   ],
   Select: [
     { prop: 'options', type: 'SelectOption[]', defaultValue: 'required', description: 'Option list.' },
@@ -382,13 +373,6 @@ function App() {
   "version": "0.1.70",
   "ready": true
 }`)
-  const [richTextValue, setRichTextValue] = useState(`
-    <h1>Getting started</h1>
-    <p>Welcome to the <strong>Simple Editor</strong> template! This template integrates <strong>open source UI components</strong> and Tiptap extensions licensed under <strong>MIT</strong>.</p>
-    <p>Integrate it by following the <a href="https://tiptap.dev/docs" target="_blank" rel="noreferrer">Tiptap UI Components</a> docs or using our CLI tool.</p>
-    <p><code>npx @tiptap/cli init</code></p>
-    <h2>Features</h2>
-  `)
   const [selectValue, setSelectValue] = useState('react')
   const [dropdownValue, setDropdownValue] = useState('weekly')
   const [checked, setChecked] = useState(true)
@@ -659,29 +643,6 @@ function App() {
                   </div>
                 ),
                 code: '<CodeEditor value={json} onChange={setJson} theme="light|vs-dark" height="280px" options={{ minimap: { enabled: false } }} />',
-              },
-            ]}
-          />
-        </section>
-
-        <section id="rich-editor" className="docs-section">
-          <DemoShowcase
-            title="RichEditor"
-            description="A rich text editor built with react-quill for formatted writing and content editing."
-            variants={[
-              {
-                label: 'FORMATTED CONTENT',
-                preview: (
-                  <div className="preview-col full-row">
-                    <RichEditor
-                      value={richTextValue}
-                      onChange={setRichTextValue}
-                      placeholder="Write something rich..."
-                      height={220}
-                    />
-                  </div>
-                ),
-                code: '<RichEditor value={value} onChange={setValue} placeholder="Write something rich..." height={220} />',
               },
             ]}
           />
