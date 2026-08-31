@@ -3,6 +3,9 @@ import "tinymce/tinymce";
 import "tinymce/icons/default/icons";
 import "tinymce/themes/silver";
 import "tinymce/models/dom/model";
+import "tinymce/skins/ui/oxide/skin.css";
+import "tinymce/skins/ui/oxide/content.css";
+import "tinymce/skins/content/default/content.css";
 import { cn } from "../utils/helpers";
 import Typography from "./Typography";
 
@@ -83,6 +86,8 @@ const RichEditor = React.forwardRef<HTMLDivElement, RichEditorProps>(
       tinymceApi.init({
         target: textareaRef.current,
         selector: undefined,
+        skin: "oxide",
+        content_css: "default",
         height,
         menubar,
         toolbar,

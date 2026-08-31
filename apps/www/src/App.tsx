@@ -13,6 +13,7 @@ import {
   ImageWithPlaceholder,
   Input,
   CodeEditor,
+  RichEditor,
   Loading,
   Skeleton,
   Modal,
@@ -65,6 +66,7 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'button', name: 'Button' },
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
+  { id: 'rich-editor', name: 'RichEditor' },
   { id: 'json-editor', name: 'CodeEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
@@ -368,6 +370,7 @@ function App() {
   })
   const [name, setName] = useState('Shivam')
   const [description, setDescription] = useState('A reusable design system component library.')
+  const [richEditorValue, setRichEditorValue] = useState('<p>Welcome to <strong>SSOVEE UI</strong> with <em>rich content</em>.</p>')
   const [jsonValue, setJsonValue] = useState(`{
   "name": "SSOVEE UI",
   "version": "0.1.70",
@@ -615,6 +618,59 @@ function App() {
                   />
                 ),
                 code: '<TextArea label="Description" value={value} onChange={...} error="..." helperText="..." fullWidth />',
+              },
+            ]}
+          />
+        </section>
+
+        <section id="rich-editor" className="docs-section">
+          <DemoShowcase
+            title="RichEditor"
+            description="A WYSIWYG editor with TinyMCE integration, toolbar controls, and rich HTML content." 
+            variants={[
+              {
+                label: 'BASIC',
+                preview: (
+                  <RichEditor
+                    label="Message"
+                    value={richEditorValue}
+                    onChange={setRichEditorValue}
+                    helperText="Supports bold, lists, links, tables, and media embeds."
+                    fullWidth
+                    height="240px"
+                  />
+                ),
+                code: '<RichEditor label="Message" value={value} onChange={setValue} fullWidth height="240px" />',
+              },
+              {
+                label: 'FORM STATE',
+                preview: (
+                  <RichEditor
+                    label="Editorial note"
+                    value={richEditorValue}
+                    onChange={setRichEditorValue}
+                    error={richEditorValue.length < 20 ? 'Please add a bit more content.' : undefined}
+                    helperText="This field validates the content length."
+                    fullWidth
+                    height="220px"
+                  />
+                ),
+                code: '<RichEditor label="Editorial note" error={...} helperText="..." fullWidth />',
+              },
+              {
+                label: 'CUSTOM TOOLBAR',
+                preview: (
+                  <RichEditor
+                    label="Short note"
+                    value="<p><strong>Quick draft</strong>: launch the next campaign.</p>"
+                    onChange={setRichEditorValue}
+                    toolbar="bold italic underline | link | undo redo"
+                    plugins={['advlist', 'autolink', 'link', 'wordcount']}
+                    fullWidth
+                    height="180px"
+                  />
+                ),
+                code: '<RichEditor toolbar="bold italic underline | link | undo redo" plugins={[...]}/>',
               },
             ]}
           />
