@@ -13,9 +13,8 @@ const useGridClasses = (
   const gridClasses: Record<string, string> = useMemo(() => {
     const classes: Record<string, string> = {};
     for (const element in gridRules) {
-      const classRules = gridRules[element];
-      // Check for device-specific class (col-span-{deviceType}-{col-span})
-      const colSpan = classRules["col-span"][deviceType];
+      const classRules = gridRules[element] ?? {};
+      const colSpan = classRules["col-span"]?.[deviceType] ?? "12";
       classes[element] = `col-span-${deviceType}-${colSpan}`;
     }
     return classes;

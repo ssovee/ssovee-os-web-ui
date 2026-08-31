@@ -3,6 +3,7 @@
 export { default as Button } from "./components/Button";
 export { default as Input } from "./components/Input";
 export { default as TextArea } from "./components/TextArea";
+export { default as RichEditor } from "./components/RichEditor";
 export { default as CodeEditor } from "./components/CodeEditor";
 export { default as Select } from "./components/Select";
 export { default as Checkbox } from "./components/Checkbox";
@@ -41,6 +42,7 @@ export { getFormattedDate } from "./hooks/getFormattedDate";
 export type { ButtonProps } from "./components/Button";
 export type { InputProps } from "./components/Input";
 export type { TextAreaProps } from "./components/TextArea";
+export type { RichEditorProps } from "./components/RichEditor";
 export type { CodeEditorProps, JsonEditorProps } from "./components/CodeEditor";
 export type { SelectProps } from "./components/Select";
 export type { SelectOption } from "./components/Select";

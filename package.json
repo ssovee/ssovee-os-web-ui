@@ -69,6 +69,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@phosphor-icons/react": ">=2",
+    "tinymce": "^8.9.0",
     "ua-parser-js": "^2.0.4"
   },
   "devDependencies": {

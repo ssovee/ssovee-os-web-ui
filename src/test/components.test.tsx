@@ -30,6 +30,7 @@ import Accordion from "../components/Accordion";
 import Tabs from "../components/Tabs";
 import Typography from "../components/Typography";
 import ImageWithPlaceholder from "../components/ImageWithPlaceholder";
+import RichEditor from "../components/RichEditor";
 import WindowWithSideMenu from "../components/WindowWithSideMenu";
 import WindowWithoutSideMenu from "../components/WindowWithoutSideMenu";
 import PluginPlayground from "../components/PluginPlayground";
@@ -102,6 +103,19 @@ describe("component smoke tests", () => {
     );
 
     expect(container.querySelector(".test-code-editor")).toBeInTheDocument();
+  });
+
+  it("renders RichEditor container", () => {
+    render(
+      <RichEditor
+        value="<p>Hello world</p>"
+        onChange={vi.fn()}
+        height="220px"
+        label="Message"
+      />
+    );
+
+    expect(screen.getByText(/message/i)).toBeInTheDocument();
   });
 
   it("renders Card with content", () => {
