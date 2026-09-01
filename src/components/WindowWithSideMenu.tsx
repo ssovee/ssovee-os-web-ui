@@ -9,7 +9,7 @@ import React, {
   ReactElement,
 } from "react";
 import { AppInterface } from "@/types/appsList";
-import { globalKeyboardShortcuts } from "@/utils/constants";
+import { globalKeyboardShortcuts } from "../utils/constants";
 
 const SIDEBAR_WIDTH = 200; // fixed sidebar width
 

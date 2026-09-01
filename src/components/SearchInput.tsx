@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { cn } from "../utils/helpers";
 import useShortcutFormatter from "../hooks/useShortcutFormatter";
-import { globalKeyboardShortcuts } from "@/utils/constants";
+import { globalKeyboardShortcuts } from "../utils/constants";
 
 export interface SearchInputProps extends Omit<
   React.InputHTMLAttributes<HTMLInputElement>,

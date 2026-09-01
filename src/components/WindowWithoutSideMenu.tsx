@@ -8,7 +8,7 @@ import React, {
 import Typography from "./Typography";
 import useShortcutFormatter from "../hooks/useShortcutFormatter";
 import { AppInterface } from "@/types/appsList";
-import { globalKeyboardShortcuts } from "@/utils/constants";
+import { globalKeyboardShortcuts } from "../utils/constants";
 
 export interface WindowSizeProps {
   windowSize: { width: number; height: number };

@@ -94,7 +94,7 @@ const matchShortcut = (event: KeyboardEvent, shortcut: string[], os: OS) => {
 const useShortcutFormatter = ({
   globalKeyboardShortcuts = [],
 }: {
-  globalKeyboardShortcuts: Shortcut[];
+  globalKeyboardShortcuts?: Shortcut[];
 }): UseShortcutFormatterReturn => {
   const [os, setOS] = useState<OS>("windows");
   const listenersRef = useRef<Map<string, Set<(e: KeyboardEvent) => void>>>(
