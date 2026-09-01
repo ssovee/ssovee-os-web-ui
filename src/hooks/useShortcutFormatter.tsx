@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { UAParser } from "ua-parser-js";
 
 type OS = "mac" | "windows" | "linux";
@@ -9,7 +9,7 @@ type KeyMap = {
   };
 };
 
-type Shortcut = {
+export type Shortcut = {
   command: string;
   shortcut: string[];
   usage: string;
@@ -18,30 +18,45 @@ type Shortcut = {
 const keyMap: KeyMap = {
   mac: {
     ctrl: "⌘",
+    cmd: "⌘",
+    meta: "⌘",
     alt: "⌥",
+    option: "⌥",
     shift: "⇧",
     enter: "⏎",
     backspace: "⌫",
     arrowup: "↑",
     arrowdown: "↓",
+    arrowleft: "←",
+    arrowright: "→",
   },
   windows: {
     ctrl: "Ctrl",
+    cmd: "Ctrl",
+    meta: "Win",
     alt: "Alt",
+    option: "Alt",
     shift: "Shift",
     enter: "Enter",
     backspace: "Backspace",
     arrowup: "↑",
     arrowdown: "↓",
+    arrowleft: "←",
+    arrowright: "→",
   },
   linux: {
     ctrl: "Ctrl",
+    cmd: "Ctrl",
+    meta: "Super",
     alt: "Alt",
+    option: "Alt",
     shift: "Shift",
     enter: "Enter",
     backspace: "Backspace",
     arrowup: "↑",
     arrowdown: "↓",
+    arrowleft: "←",
+    arrowright: "→",
   },
 };
 
@@ -52,7 +67,11 @@ const detectOS = (): OS => {
   if (osName.includes("mac")) return "mac";
   if (osName.includes("windows")) return "windows";
   if (osName.includes("linux")) return "linux";
-  return "windows"; // fallback
+  return "windows";
+};
+
+type UseShortcutFormatterOptions = {
+  globalKeyboardShortcuts?: Shortcut[];
 };
 
 type UseShortcutFormatterReturn = {
@@ -60,45 +79,43 @@ type UseShortcutFormatterReturn = {
   getShortcutByCommand: (command: string) => string[];
   addShortcutListener: (
     command: string,
-    listener: (e: KeyboardEvent) => void,
+    listener: (e: KeyboardEvent) => void
   ) => void;
   removeShortcutListener: (
     command: string,
-    listener: (e: KeyboardEvent) => void,
+    listener: (e: KeyboardEvent) => void
   ) => void;
 };
 
 const normalizeKey = (key: string) => key.toLowerCase();
 
 const matchShortcut = (event: KeyboardEvent, shortcut: string[], os: OS) => {
-  // Normalize keys for comparison
   const keySet = new Set(shortcut.map(normalizeKey));
-  // Map event to normalized keys
   const pressed: string[] = [];
+
   if (os === "mac") {
     if (event.metaKey) pressed.push("ctrl");
   } else {
     if (event.ctrlKey) pressed.push("ctrl");
   }
+  
   if (event.altKey) pressed.push("alt");
   if (event.shiftKey) pressed.push("shift");
-  // The main key
+
   if (event.key && !["Control", "Meta", "Alt", "Shift"].includes(event.key)) {
     pressed.push(normalizeKey(event.key));
   }
-  // Compare sets
+
   if (pressed.length !== shortcut.length) return false;
   return pressed.every((k) => keySet.has(k));
 };
 
 const useShortcutFormatter = ({
   globalKeyboardShortcuts = [],
-}: {
-  globalKeyboardShortcuts?: Shortcut[];
-}): UseShortcutFormatterReturn => {
+}: UseShortcutFormatterOptions = {}): UseShortcutFormatterReturn => {
   const [os, setOS] = useState<OS>("windows");
   const listenersRef = useRef<Map<string, Set<(e: KeyboardEvent) => void>>>(
-    new Map(),
+    new Map()
   );
 
   useEffect(() => {
@@ -106,52 +123,62 @@ const useShortcutFormatter = ({
   }, []);
 
   useEffect(() => {
+    if (!globalKeyboardShortcuts.length) return;
+
     const handleKeyDown = (event: KeyboardEvent) => {
       for (const shortcut of globalKeyboardShortcuts) {
         if (matchShortcut(event, shortcut.shortcut, os)) {
           const listeners = listenersRef.current.get(shortcut.command);
-          if (listeners) {
-            event.preventDefault(); // Prevent browser defaults for matched shortcuts
+          if (listeners && listeners.size > 0) {
+            event.preventDefault();
             listeners.forEach((cb) => cb(event));
           }
         }
       }
     };
+
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [os]);
+  }, [os, globalKeyboardShortcuts]);
 
-  const formatKeys = (keys: string[] = []): string => {
-    return keys
-      .map((key) => keyMap[os][key.toLowerCase()] || key.toUpperCase())
-      .join(" + ");
-  };
+  const formatKeys = useCallback(
+    (keys: string[] = []): string => {
+      const separator = os === "mac" ? "" : " + ";
+      return keys
+        .map((key) => keyMap[os][key.toLowerCase()] || key.toUpperCase())
+        .join(separator);
+    },
+    [os]
+  );
 
-  const getShortcutByCommand = (command: string): string[] => {
-    const found = globalKeyboardShortcuts.find((s) => s.command === command);
-    return found ? found.shortcut : [""];
-  };
+  const getShortcutByCommand = useCallback(
+    (command: string): string[] => {
+      const found = globalKeyboardShortcuts.find((s) => s.command === command);
+      return found ? found.shortcut : [];
+    },
+    [globalKeyboardShortcuts]
+  );
 
-  const addShortcutListener = (
-    command: string,
-    listener: (e: KeyboardEvent) => void,
-  ) => {
-    if (!listenersRef.current.has(command)) {
-      listenersRef.current.set(command, new Set());
-    }
-    listenersRef.current.get(command)!.add(listener);
-  };
+  const addShortcutListener = useCallback(
+    (command: string, listener: (e: KeyboardEvent) => void) => {
+      if (!listenersRef.current.has(command)) {
+        listenersRef.current.set(command, new Set());
+      }
+      listenersRef.current.get(command)!.add(listener);
+    },
+    []
+  );
 
-  const removeShortcutListener = (
-    command: string,
-    listener: (e: KeyboardEvent) => void,
-  ) => {
-    if (listenersRef.current.has(command)) {
-      listenersRef.current.get(command)!.delete(listener);
-    }
-  };
+  const removeShortcutListener = useCallback(
+    (command: string, listener: (e: KeyboardEvent) => void) => {
+      if (listenersRef.current.has(command)) {
+        listenersRef.current.get(command)!.delete(listener);
+      }
+    },
+    []
+  );
 
   return {
     formatKeys,
