@@ -208,7 +208,6 @@ The package exports these components and types for external use:
 - `Button`
 - `Input`
 - `TextArea`
-- `RichEditor`
 - `CodeEditor`
 - `Select`
 - `SelectOption`

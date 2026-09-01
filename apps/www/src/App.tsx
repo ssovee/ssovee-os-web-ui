@@ -65,7 +65,6 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'button', name: 'Button' },
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
-  { id: 'rich-editor', name: 'RichEditor' },
   { id: 'json-editor', name: 'CodeEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
@@ -369,7 +368,6 @@ function App() {
   })
   const [name, setName] = useState('Shivam')
   const [description, setDescription] = useState('A reusable design system component library.')
-  const [richEditorValue, setRichEditorValue] = useState('<p>Welcome to <strong>SSOVEE UI</strong> with <em>rich content</em>.</p>')
   const [jsonValue, setJsonValue] = useState(`{
   "name": "SSOVEE UI",
   "version": "0.1.70",
