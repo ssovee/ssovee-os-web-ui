@@ -82,30 +82,6 @@ export function SettingsEditor() {
 
 Use `theme="vs-dark"` for a dark editor. The component also accepts Monaco `language`, `height`, and `options` props.
 
-### RichEditor
-
-`RichEditor` is a TinyMCE-based rich text editor for formatted content and HTML editing.
-
-```tsx
-import { useState } from "react";
-import { RichEditor } from "ssovee-os-web-ui";
-
-export function NotesEditor() {
-  const [value, setValue] = useState("<p>Start writing...</p>");
-
-  return (
-    <RichEditor
-      label="Message"
-      value={value}
-      onChange={setValue}
-      height="260px"
-      placeholder="Write something beautiful..."
-      helperText="Supports basic formatting, links, tables, and media."
-    />
-  );
-}
-```
-
 The component supports `toolbar`, `plugins`, `fullWidth`, `error`, and `disabled` props for common form usage.
 
 ## Window components

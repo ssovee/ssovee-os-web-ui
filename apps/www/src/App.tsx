@@ -13,7 +13,6 @@ import {
   ImageWithPlaceholder,
   Input,
   CodeEditor,
-  RichEditor,
   Loading,
   Skeleton,
   Modal,
@@ -618,59 +617,6 @@ function App() {
                   />
                 ),
                 code: '<TextArea label="Description" value={value} onChange={...} error="..." helperText="..." fullWidth />',
-              },
-            ]}
-          />
-        </section>
-
-        <section id="rich-editor" className="docs-section">
-          <DemoShowcase
-            title="RichEditor"
-            description="A WYSIWYG editor with TinyMCE integration, toolbar controls, and rich HTML content." 
-            variants={[
-              {
-                label: 'BASIC',
-                preview: (
-                  <RichEditor
-                    label="Message"
-                    value={richEditorValue}
-                    onChange={setRichEditorValue}
-                    helperText="Supports bold, lists, links, tables, and media embeds."
-                    fullWidth
-                    height="240px"
-                  />
-                ),
-                code: '<RichEditor label="Message" value={value} onChange={setValue} fullWidth height="240px" />',
-              },
-              {
-                label: 'FORM STATE',
-                preview: (
-                  <RichEditor
-                    label="Editorial note"
-                    value={richEditorValue}
-                    onChange={setRichEditorValue}
-                    error={richEditorValue.length < 20 ? 'Please add a bit more content.' : undefined}
-                    helperText="This field validates the content length."
-                    fullWidth
-                    height="220px"
-                  />
-                ),
-                code: '<RichEditor label="Editorial note" error={...} helperText="..." fullWidth />',
-              },
-              {
-                label: 'CUSTOM TOOLBAR',
-                preview: (
-                  <RichEditor
-                    label="Short note"
-                    value="<p><strong>Quick draft</strong>: launch the next campaign.</p>"
-                    onChange={setRichEditorValue}
-                    toolbar="bold italic underline | link | undo redo"
-                    plugins={['advlist', 'autolink', 'link', 'wordcount']}
-                    fullWidth
-                    height="180px"
-                  />
-                ),
-                code: '<RichEditor toolbar="bold italic underline | link | undo redo" plugins={[...]}/>',
               },
             ]}
           />
