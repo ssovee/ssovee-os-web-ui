@@ -1,8 +1,17 @@
-import React, { useImperativeHandle, useRef, useCallback, useEffect } from "react";
+import React, {
+  useImperativeHandle,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
 import { cn } from "../utils/helpers";
 import useShortcutFormatter from "../hooks/useShortcutFormatter";
+import { globalKeyboardShortcuts } from "@/utils/constants";
 
-export interface SearchInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
+export interface SearchInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "type" | "size"
+> {
   onSearch?: (value: string) => void;
   placeholder?: string;
   variant?: "default" | "filled" | "outline";
@@ -29,14 +38,19 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       isActive = true,
       ...props
     },
-    ref
+    ref,
   ) => {
     const [searchValue, setSearchValue] = React.useState(value || "");
     const inputRef = useRef<HTMLInputElement>(null);
 
     useImperativeHandle(ref, () => inputRef.current!);
 
-    const { addShortcutListener, removeShortcutListener, formatKeys, getShortcutByCommand } = useShortcutFormatter();
+    const {
+      addShortcutListener,
+      removeShortcutListener,
+      formatKeys,
+      getShortcutByCommand,
+    } = useShortcutFormatter({ globalKeyboardShortcuts });
 
     useEffect(() => {
       setSearchValue(value ?? "");
@@ -54,7 +68,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
       onSearch?.("");
       // Create a synthetic event for onChange
       const syntheticEvent = {
-        target: { value: "" }
+        target: { value: "" },
       } as React.ChangeEvent<HTMLInputElement>;
       onChange?.(syntheticEvent);
     }, [onChange, onSearch]);
@@ -80,7 +94,13 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
         removeShortcutListener("focus_search", handleFocusSearch);
         removeShortcutListener("escape_button_action", handleClearShortcut);
       };
-    }, [enableKeyboardShortcuts, isActive, handleClear, addShortcutListener, removeShortcutListener]);
+    }, [
+      enableKeyboardShortcuts,
+      isActive,
+      handleClear,
+      addShortcutListener,
+      removeShortcutListener,
+    ]);
 
     const displayPlaceholder = enableKeyboardShortcuts
       ? `${placeholder} (${formatKeys(getShortcutByCommand("focus_search"))})`
@@ -180,14 +200,24 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
             aria-label="Clear search"
             type="button"
           >
-            <svg className={iconSizeClasses[size]} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className={iconSizeClasses[size]}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </button>
         )}
       </div>
     );
-  }
+  },
 );
 
 SearchInput.displayName = "SearchInput";

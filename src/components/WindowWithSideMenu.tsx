@@ -9,6 +9,7 @@ import React, {
   ReactElement,
 } from "react";
 import { AppInterface } from "@/types/appsList";
+import { globalKeyboardShortcuts } from "@/utils/constants";
 
 const SIDEBAR_WIDTH = 200; // fixed sidebar width
 
@@ -154,7 +155,7 @@ const WindowWithSideMenu: React.FC<WindowWithSideMenuProps> = ({
     addShortcutListener,
     removeShortcutListener,
     getShortcutByCommand,
-  } = useShortcutFormatter();
+  } = useShortcutFormatter({ globalKeyboardShortcuts });
   const [state, dispatch] = useReducer(reducer, {
     ...initialState,
     windowSize: app.windowSize.windowSize ?? defaultSize,

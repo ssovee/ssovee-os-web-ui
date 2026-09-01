@@ -1,4 +1,3 @@
-import { globalKeyboardShortcuts } from "../utils/constants";
 import { useState, useEffect, useRef } from "react";
 import { UAParser } from "ua-parser-js";
 
@@ -8,6 +7,12 @@ type KeyMap = {
   [key in OS]: {
     [key: string]: string;
   };
+};
+
+type Shortcut = {
+  command: string;
+  shortcut: string[];
+  usage: string;
 };
 
 const keyMap: KeyMap = {
@@ -55,11 +60,11 @@ type UseShortcutFormatterReturn = {
   getShortcutByCommand: (command: string) => string[];
   addShortcutListener: (
     command: string,
-    listener: (e: KeyboardEvent) => void
+    listener: (e: KeyboardEvent) => void,
   ) => void;
   removeShortcutListener: (
     command: string,
-    listener: (e: KeyboardEvent) => void
+    listener: (e: KeyboardEvent) => void,
   ) => void;
 };
 
@@ -86,9 +91,15 @@ const matchShortcut = (event: KeyboardEvent, shortcut: string[], os: OS) => {
   return pressed.every((k) => keySet.has(k));
 };
 
-const useShortcutFormatter = (): UseShortcutFormatterReturn => {
+const useShortcutFormatter = ({
+  globalKeyboardShortcuts = [],
+}: {
+  globalKeyboardShortcuts: Shortcut[];
+}): UseShortcutFormatterReturn => {
   const [os, setOS] = useState<OS>("windows");
-  const listenersRef = useRef<Map<string, Set<(e: KeyboardEvent) => void>>>(new Map());
+  const listenersRef = useRef<Map<string, Set<(e: KeyboardEvent) => void>>>(
+    new Map(),
+  );
 
   useEffect(() => {
     setOS(detectOS());
@@ -123,14 +134,20 @@ const useShortcutFormatter = (): UseShortcutFormatterReturn => {
     return found ? found.shortcut : [""];
   };
 
-  const addShortcutListener = (command: string, listener: (e: KeyboardEvent) => void) => {
+  const addShortcutListener = (
+    command: string,
+    listener: (e: KeyboardEvent) => void,
+  ) => {
     if (!listenersRef.current.has(command)) {
       listenersRef.current.set(command, new Set());
     }
     listenersRef.current.get(command)!.add(listener);
   };
 
-  const removeShortcutListener = (command: string, listener: (e: KeyboardEvent) => void) => {
+  const removeShortcutListener = (
+    command: string,
+    listener: (e: KeyboardEvent) => void,
+  ) => {
     if (listenersRef.current.has(command)) {
       listenersRef.current.get(command)!.delete(listener);
     }
