@@ -95,7 +95,7 @@ describe("component smoke tests", () => {
       <CodeEditor
         value='{"name":"SSOVEE UI","enabled":true}'
         onChange={vi.fn()}
-        theme="light"
+        isDarkTheme={true}
         height="180px"
         className="test-code-editor"
       />
