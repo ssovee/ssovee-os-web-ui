@@ -181,8 +181,6 @@ export function PluginPreview() {
   return (
     <PluginPlayground
       metadata={pluginMetadata}
-      onClose={() => console.log("Playground closed")}
-      onMinimize={(isMinimized) => console.log("Minimized:", isMinimized)}
     >
       <div>
         <Typography variant="h6">Plugin Content</Typography>

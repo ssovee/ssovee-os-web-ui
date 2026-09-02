@@ -394,8 +394,6 @@ describe("component smoke tests", () => {
     render(
       <PluginPlayground
         metadata={{ title: "Plugin Preview", defaultWidth: 640, defaultHeight: 480 }}
-        onClose={vi.fn()}
-        onMinimize={vi.fn()}
       >
         <div>Plugin Content</div>
       </PluginPlayground>
