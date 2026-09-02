@@ -1,22 +1,22 @@
 export const globalKeyboardShortcuts = [
   {
     command: "exit_app",
-    shortcut: ["ctrl", "q"],
-    usage: "Exit app",
+    shortcut: ["Ctrl", "E"],
+    usage: "Exit or quit the application",
   },
   {
     command: "minimize_app",
-    shortcut: ["ctrl", "m"],
-    usage: "Minimize app",
+    shortcut: ["Ctrl", "ArrowDown"],
+    usage: "Minimize the application window",
   },
   {
     command: "maximize_app",
-    shortcut: ["ctrl", "shift", "m"],
-    usage: "Maximize app",
+    shortcut: ["Ctrl", "ArrowUp"],
+    usage: "Maximize the application window",
   },
   {
     command: "focus_search",
-    shortcut: ["ctrl", "k"],
-    usage: "Focus search",
+    shortcut: ["Ctrl", "k"],
+    usage: "Focus on current app search",
   },
 ];
