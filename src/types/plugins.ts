@@ -39,6 +39,7 @@ export interface PluginAPI {
   openApp: (app: AppInterface) => void;
   getUser: () => Promise<any>;
   getToken: () => Promise<string>;
+  isDarkTheme?: boolean;
 }
 
 export interface PluginComponentProps {

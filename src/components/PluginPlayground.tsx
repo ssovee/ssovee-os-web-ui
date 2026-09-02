@@ -191,6 +191,7 @@ export default function PluginPlayground({
       getToken: async () => {
         return mockToken;
       },
+      isDarkTheme: true, 
     }),
     [mockToken, mockUser],
   );
