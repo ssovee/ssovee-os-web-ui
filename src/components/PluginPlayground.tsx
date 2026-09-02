@@ -57,8 +57,7 @@ interface PluginPlaygroundProps {
     | ((props: PluginComponentProps) => React.ReactNode);
   metadata: PluginPlaygroundMetadata;
   backgroundImage?: string;
-  onClose?: () => void;
-  onMinimize?: (isMinimized: boolean) => void;
+  api?: PluginAPI;
 }
 
 const DEFAULT_BACKGROUND = "/wallpaper/Wallpaper3.webp";
@@ -119,8 +118,7 @@ export default function PluginPlayground({
   children,
   metadata,
   backgroundImage,
-  onClose,
-  onMinimize,
+  api,
 }: Readonly<PluginPlaygroundProps>) {
   const [mockUser] = useState<MockUser>(DEFAULT_MOCK_USER);
   const [mockToken] = useState(DEFAULT_TOKEN);
@@ -133,7 +131,9 @@ export default function PluginPlayground({
     if (typeof window === "undefined") return;
 
     const storedTheme = window.localStorage.getItem("plugin-playground-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
     const shouldUseDark = storedTheme ? storedTheme === "dark" : prefersDark;
     setIsNightMode(shouldUseDark);
   }, []);
@@ -160,39 +160,39 @@ export default function PluginPlayground({
     setIsActive(false);
     setIsMinimized(true);
     setIsClosed(false);
-    onMinimize?.(true);
-  }, [onMinimize]);
+  }, []);
 
   const closeWindow = useCallback(() => {
     setIsActive(false);
     setIsClosed(true);
     setIsMinimized(false);
-    onClose?.();
-  }, [onClose]);
+  }, []);
 
   const restoreWindow = useCallback(() => {
     setIsActive(true);
     setIsClosed(false);
     setIsMinimized(false);
-    onMinimize?.(false);
-  }, [onMinimize]);
+  }, []);
 
   const mockApi: PluginAPI = useMemo(
-    () => ({
-      showToast: (message: string, type: ToastType) => {
-        console.info(`[playground:${type}] ${message}`);
-      },
-      openApp: (app: AppInterface) => {
-        console.info(`[playground:openApp] ${app.slug}`);
-      },
-      getUser: async () => {
-        return mockUser;
-      },
-      getToken: async () => {
-        return mockToken;
-      },
-      isDarkTheme: true, 
-    }),
+    () =>
+      api
+        ? api
+        : {
+            showToast: (message: string, type: ToastType) => {
+              console.info(`[playground:${type}] ${message}`);
+            },
+            openApp: (app: AppInterface) => {
+              console.info(`[playground:openApp] ${app.slug}`);
+            },
+            getUser: async () => {
+              return mockUser;
+            },
+            getToken: async () => {
+              return mockToken;
+            },
+            isDarkTheme: true,
+          },
     [mockToken, mockUser],
   );
 
