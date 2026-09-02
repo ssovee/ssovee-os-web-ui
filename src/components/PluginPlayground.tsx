@@ -57,7 +57,6 @@ interface PluginPlaygroundProps {
     | ((props: PluginComponentProps) => React.ReactNode);
   metadata: PluginPlaygroundMetadata;
   backgroundImage?: string;
-  api?: PluginAPI;
 }
 
 const DEFAULT_BACKGROUND = "/wallpaper/Wallpaper3.webp";
@@ -118,7 +117,6 @@ export default function PluginPlayground({
   children,
   metadata,
   backgroundImage,
-  api,
 }: Readonly<PluginPlaygroundProps>) {
   const [mockUser] = useState<MockUser>(DEFAULT_MOCK_USER);
   const [mockToken] = useState(DEFAULT_TOKEN);
@@ -174,27 +172,23 @@ export default function PluginPlayground({
     setIsMinimized(false);
   }, []);
 
-  const mockApi: PluginAPI = useMemo(
-    () =>
-      api
-        ? api
-        : {
-            showToast: (message: string, type: ToastType) => {
-              console.info(`[playground:${type}] ${message}`);
-            },
-            openApp: (app: AppInterface) => {
-              console.info(`[playground:openApp] ${app.slug}`);
-            },
-            getUser: async () => {
-              return mockUser;
-            },
-            getToken: async () => {
-              return mockToken;
-            },
-            isDarkTheme: true,
-          },
-    [mockToken, mockUser],
-  );
+  const mockApi: PluginAPI = useMemo(() => {
+    return {
+      showToast: (message: string, type: ToastType) => {
+        console.info(`[playground:${type}] ${message}`);
+      },
+      openApp: (app: AppInterface) => {
+        console.info(`[playground:openApp] ${app.slug}`);
+      },
+      getUser: async () => {
+        return mockUser;
+      },
+      getToken: async () => {
+        return mockToken;
+      },
+      isDarkTheme: isNightMode,
+    };
+  }, [mockToken, mockUser, isNightMode]);
 
   const appProps: AppInterface = useMemo(
     () => ({
