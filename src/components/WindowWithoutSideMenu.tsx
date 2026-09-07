@@ -4,11 +4,14 @@ import React, {
   useRef,
   isValidElement,
   ReactElement,
+  useCallback,
 } from "react";
 import Typography from "./Typography";
 import useShortcutFormatter from "../hooks/useShortcutFormatter";
 import { AppInterface } from "@/types/appsList";
 import { globalKeyboardShortcuts } from "../utils/constants";
+
+const TOP_BAR_HEIGHT = 37;
 
 export interface WindowSizeProps {
   windowSize: { width: number; height: number };
@@ -46,19 +49,8 @@ type Action =
   | { type: "STOP_RESIZE" }
   | { type: "TOGGLE_MINIMIZE"; payload: { width: number; height: number } }
   | { type: "TOGGLE_MAXIMIZE"; payload?: { width: number; height: number } }
-  | { type: "SYNC_MINIMIZE_STATE"; payload: boolean };
-
-const initialState: State = {
-  position: { x: 0, y: 40 },
-  isDragging: false,
-  startPosition: { x: 0, y: 40 },
-  isMinimized: false,
-  isMaximized: false,
-  windowSize: { width: 300, height: 300 },
-  resizeStart: null,
-  defaultSize: { width: 300, height: 300 },
-  preMaximizeState: null,
-};
+  | { type: "SYNC_MINIMIZE_STATE"; payload: boolean }
+  | { type: "CLAMP_BOUNDS"; payload: { maxW: number; maxH: number } };
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -69,10 +61,7 @@ const reducer = (state: State, action: Action): State => {
     case "STOP_DRAG":
       return { ...state, isDragging: false };
     case "START_RESIZE":
-      return {
-        ...state,
-        resizeStart: action.payload,
-      };
+      return { ...state, resizeStart: action.payload };
     case "RESIZE":
       return { ...state, windowSize: action.payload };
     case "STOP_RESIZE":
@@ -100,7 +89,10 @@ const reducer = (state: State, action: Action): State => {
           ...state,
           isMaximized: false,
           windowSize: state.preMaximizeState?.windowSize || state.defaultSize,
-          position: state.preMaximizeState?.position || { x: 0, y: 40 },
+          position: state.preMaximizeState?.position || {
+            x: 0,
+            y: TOP_BAR_HEIGHT,
+          },
           preMaximizeState: null,
         };
       }
@@ -112,11 +104,42 @@ const reducer = (state: State, action: Action): State => {
           windowSize: state.windowSize,
         },
         windowSize: action.payload || {
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: typeof window !== "undefined" ? window.innerWidth : 300,
+          height:
+            typeof window !== "undefined"
+              ? window.innerHeight - TOP_BAR_HEIGHT
+              : 300,
         },
-        position: state.position,
+        position: { x: 0, y: TOP_BAR_HEIGHT },
       };
+    case "CLAMP_BOUNDS": {
+      const clampedWidth = Math.min(
+        state.windowSize.width,
+        action.payload.maxW,
+      );
+      const clampedHeight = Math.min(
+        state.windowSize.height,
+        action.payload.maxH,
+      );
+      const clampedX = Math.max(
+        0,
+        Math.min(state.position.x, action.payload.maxW - clampedWidth),
+      );
+      const clampedY = Math.max(
+        TOP_BAR_HEIGHT,
+        Math.min(state.position.y, action.payload.maxH - clampedHeight),
+      );
+
+      return {
+        ...state,
+        windowSize: state.isMaximized
+          ? { width: action.payload.maxW, height: action.payload.maxH }
+          : { width: clampedWidth, height: clampedHeight },
+        position: state.isMaximized
+          ? { x: 0, y: TOP_BAR_HEIGHT }
+          : { x: clampedX, y: clampedY },
+      };
+    }
     default:
       return state;
   }
@@ -135,13 +158,48 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     getShortcutByCommand,
   } = useShortcutFormatter({ globalKeyboardShortcuts });
 
+  // Dynamically calculate baseline initial size bounded by active viewport
+  const getInitialDimensions = useCallback(() => {
+    const rawSize = app.windowSize.windowSize ?? defaultSize;
+    if (typeof window === "undefined") return rawSize;
+
+    return {
+      width: Math.min(rawSize.width, window.innerWidth),
+      height: Math.min(rawSize.height, window.innerHeight - TOP_BAR_HEIGHT),
+    };
+  }, [app.windowSize.windowSize, defaultSize]);
+
+  const initialDimensions = getInitialDimensions();
+
   const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    windowSize: app.windowSize.windowSize ?? defaultSize,
-    defaultSize: app.windowSize.windowSize ?? defaultSize,
+    position: { x: 0, y: TOP_BAR_HEIGHT },
+    isDragging: false,
+    startPosition: { x: 0, y: TOP_BAR_HEIGHT },
+    isMinimized: false,
+    isMaximized: false,
+    windowSize: initialDimensions,
+    resizeStart: null,
+    defaultSize: initialDimensions,
+    preMaximizeState: null,
   });
 
   const windowRef = useRef<HTMLDivElement>(null);
+
+  // Re-clamp window bounds dynamically when the browser/screen resizes
+  useEffect(() => {
+    const handleViewportResize = () => {
+      dispatch({
+        type: "CLAMP_BOUNDS",
+        payload: {
+          maxW: window.innerWidth,
+          maxH: window.innerHeight - TOP_BAR_HEIGHT,
+        },
+      });
+    };
+
+    window.addEventListener("resize", handleViewportResize);
+    return () => window.removeEventListener("resize", handleViewportResize);
+  }, []);
 
   // Sync local minimize state from the app model passed from the parent
   useEffect(() => {
@@ -162,65 +220,82 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     });
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (state.isDragging) {
-      const newX = e.clientX - state.startPosition.x;
-      const newY = e.clientY - state.startPosition.y;
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (state.isDragging) {
+        const newX = e.clientX - state.startPosition.x;
+        const newY = e.clientY - state.startPosition.y;
 
-      const boundedX = Math.max(
-        0,
-        Math.min(newX, window.innerWidth - state.windowSize.width),
-      );
-      const boundedY = Math.max(
-        0,
-        Math.min(newY, window.innerHeight - state.windowSize.height),
-      );
+        const boundedX = Math.max(
+          0,
+          Math.min(newX, window.innerWidth - state.windowSize.width),
+        );
+        const boundedY = Math.max(
+          TOP_BAR_HEIGHT,
+          Math.min(newY, window.innerHeight - state.windowSize.height),
+        );
 
-      dispatch({ type: "DRAG", payload: { x: boundedX, y: boundedY } });
-    }
+        dispatch({ type: "DRAG", payload: { x: boundedX, y: boundedY } });
+      }
 
-    if (
-      state.resizeStart &&
-      isResizable &&
-      app.windowSize.isAppWindowResizing
-    ) {
-      // Calculate new width and height based on mouse movement
-      let newWidth =
-        state.windowSize.width + (e.clientX - (state.resizeStart?.x ?? 0));
-      let newHeight =
-        state.windowSize.height + (e.clientY - (state.resizeStart?.y ?? 0));
+      if (
+        state.resizeStart &&
+        isResizable &&
+        app.windowSize.isAppWindowResizing
+      ) {
+        const effectiveMinWidth = Math.min(
+          state.defaultSize.width,
+          window.innerWidth,
+        );
+        const effectiveMinHeight = Math.min(
+          state.defaultSize.height,
+          window.innerHeight - TOP_BAR_HEIGHT,
+        );
 
-      // Clamp to minimum size
-      newWidth = Math.max(state.defaultSize.width, newWidth);
-      newHeight = Math.max(state.defaultSize.height, newHeight);
+        let newWidth =
+          state.windowSize.width + (e.clientX - state.resizeStart.x);
+        let newHeight =
+          state.windowSize.height + (e.clientY - state.resizeStart.y);
 
-      // Clamp to viewport
-      const maxWidth = window.innerWidth - state.position.x;
-      const maxHeight = window.innerHeight - state.position.y;
-      newWidth = Math.min(newWidth, maxWidth);
-      newHeight = Math.min(newHeight, maxHeight);
+        newWidth = Math.max(effectiveMinWidth, newWidth);
+        newHeight = Math.max(effectiveMinHeight, newHeight);
 
-      dispatch({
-        type: "RESIZE",
-        payload: {
-          width: newWidth,
-          height: newHeight,
-        },
-      });
-    }
-  };
+        const maxWidth = window.innerWidth - state.position.x;
+        const maxHeight = window.innerHeight - state.position.y;
+        newWidth = Math.min(newWidth, maxWidth);
+        newHeight = Math.min(newHeight, maxHeight);
 
-  const handleMouseUp = () => {
+        dispatch({
+          type: "RESIZE",
+          payload: {
+            width: newWidth,
+            height: newHeight,
+          },
+        });
+      }
+    },
+    [
+      state.isDragging,
+      state.resizeStart,
+      state.startPosition,
+      state.windowSize,
+      state.position,
+      state.defaultSize,
+      isResizable,
+      app.windowSize.isAppWindowResizing,
+    ],
+  );
+
+  const handleMouseUp = useCallback(() => {
     if (state.isDragging) dispatch({ type: "STOP_DRAG" });
     if (state.resizeStart) dispatch({ type: "STOP_RESIZE" });
-  };
+  }, [state.isDragging, state.resizeStart]);
 
   const handleResizeStart = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
-    if (!isResizable && !app.windowSize.isAppWindowResizing) return;
+    if (!isResizable || !app.windowSize.isAppWindowResizing) return;
     e.stopPropagation();
-    // Prevent text selection while resizing
     document.body.style.userSelect = "none";
     dispatch({ type: "START_RESIZE", payload: { x: e.clientX, y: e.clientY } });
   };
@@ -234,32 +309,45 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-      // Restore user-select after resizing
       document.body.style.userSelect = "";
     };
-  }, [state.isDragging, state.resizeStart]);
+  }, [state.isDragging, state.resizeStart, handleMouseMove, handleMouseUp]);
 
   useEffect(() => {
-    if (windowRef.current) {
-      windowRef.current.addEventListener("click", () => {
-        if (app?.callback) {
-          app?.callback("CLICKED");
-        }
-      });
+    const currentRef = windowRef.current;
+    const handleActive = () => {
+      if (app?.callback) {
+        app.callback("CLICKED");
+      }
+    };
+
+    if (currentRef) {
+      currentRef.addEventListener("click", handleActive);
     }
-  }, [app?.slug, windowRef]);
+    return () => {
+      if (currentRef) {
+        currentRef.removeEventListener("click", handleActive);
+      }
+    };
+  }, [app?.slug, app]);
 
   useEffect(() => {
     const handleExitApp = () => {
       if (app?.callback) {
-        app?.callback("CLOSE_APP");
+        app.callback("CLOSE_APP");
       }
     };
     addShortcutListener("exit_app", handleExitApp);
     return () => {
       removeShortcutListener("exit_app", handleExitApp);
     };
-  }, [app?.slug, app.isActive]);
+  }, [
+    app?.slug,
+    app.isActive,
+    app,
+    addShortcutListener,
+    removeShortcutListener,
+  ]);
 
   useEffect(() => {
     const handleMinimize = () => {
@@ -269,7 +357,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
           payload: state.windowSize,
         });
         if (app?.callback) {
-          app?.callback("MINIMIZE_APP");
+          app.callback("MINIMIZE_APP");
         }
       }
     };
@@ -277,7 +365,15 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     return () => {
       removeShortcutListener("minimize_app", handleMinimize);
     };
-  }, [app?.slug, app.isActive, state.isMinimized, state.windowSize]);
+  }, [
+    app?.slug,
+    app.isActive,
+    state.isMinimized,
+    state.windowSize,
+    app,
+    addShortcutListener,
+    removeShortcutListener,
+  ]);
 
   useEffect(() => {
     const handleMaximize = () => {
@@ -286,7 +382,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
           type: "TOGGLE_MAXIMIZE",
           payload: {
             width: window.innerWidth,
-            height: window.innerHeight - 37,
+            height: window.innerHeight - TOP_BAR_HEIGHT,
           },
         });
       }
@@ -295,7 +391,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     return () => {
       removeShortcutListener("maximize_app", handleMaximize);
     };
-  }, [app?.slug, app.isActive]);
+  }, [app?.slug, app.isActive, addShortcutListener, removeShortcutListener]);
 
   if (state.isMinimized) {
     return null;
@@ -304,44 +400,44 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   return (
     <div
       ref={windowRef}
-      className="window-drop-shadow  rounded-[10px]"
+      className="window-drop-shadow rounded-[10px] flex flex-col overflow-hidden"
       style={{
-        width: `${state.windowSize.width}px`,
-        height: `${state.windowSize.height}px`,
+        width: state.isMaximized ? "100vw" : `${state.windowSize.width}px`,
+        height: state.isMaximized
+          ? `calc(100vh - ${TOP_BAR_HEIGHT}px)`
+          : `${state.windowSize.height}px`,
         transform: state.isMaximized
           ? undefined
-          : `translate(${state.position.x}px, ${state.position.y - 37}px)`,
-        overflow: state.isMinimized ? "hidden" : "auto",
+          : `translate(${state.position.x}px, ${state.position.y - TOP_BAR_HEIGHT}px)`,
         position: "absolute",
-        minWidth: `${state.defaultSize.width}px`,
-        minHeight: `${state.defaultSize.height}px`,
+        minWidth: state.isMaximized
+          ? "100vw"
+          : `min(${state.defaultSize.width}px, 100vw)`,
+        minHeight: state.isMaximized
+          ? `calc(100vh - ${TOP_BAR_HEIGHT}px)`
+          : `min(${state.defaultSize.height}px, 100vh)`,
         zIndex: state.isDragging ? 3 : app?.isActive ? 2 : 1,
       }}
     >
-      <div
-        className="mx-auto overflow-hidden h-full w-full"
-        style={{
-          minWidth: `${state.defaultSize.width}px`,
-          minHeight: `${state.defaultSize.height}px`,
-          position: "relative",
-        }}
-      >
+      <div className="flex flex-col h-full w-full relative min-w-0">
+        {/* Left Control Buttons Header */}
         <div
-          className="relative flex items-center bg-primary h-[35px] select-none"
+          className="relative flex items-center bg-primary h-[35px] select-none shrink-0"
           onMouseDown={handleMouseDown}
           style={{ cursor: state.isMaximized ? "default" : "move" }}
         >
-          {/* Left Control Buttons */}
+          {/* Action Buttons */}
           <div className="flex items-center gap-[8px] pl-[10px]">
             <button
               className="w-[12px] h-[12px] bg-[#FF6157] rounded-full"
               onClick={() => {
                 if (app?.callback) {
-                  app?.callback("CLOSE_APP");
+                  app.callback("CLOSE_APP");
                 }
               }}
               title={`Close ${formatKeys(getShortcutByCommand("exit_app"))}`}
               style={{ outline: "none", border: "none" }}
+              tabIndex={-1}
             />
             <button
               className="w-[12px] h-[12px] bg-[#FFC12F] rounded-full"
@@ -351,7 +447,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
                   payload: state.windowSize,
                 });
                 if (app?.callback) {
-                  app?.callback("MINIMIZE_APP");
+                  app.callback("MINIMIZE_APP");
                 }
               }}
               title={
@@ -362,17 +458,17 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
                     )}`
               }
               style={{ outline: "none", border: "none" }}
+              tabIndex={-1}
             />
             {isResizable && app.windowSize.isAppWindowResizing && (
               <button
                 className="w-[12px] h-[12px] bg-[#2ACB42] rounded-full"
                 onClick={() => {
-                  // playSound("click");
                   dispatch({
                     type: "TOGGLE_MAXIMIZE",
                     payload: {
                       width: window.innerWidth,
-                      height: window.innerHeight - 37,
+                      height: window.innerHeight - TOP_BAR_HEIGHT,
                     },
                   });
                 }}
@@ -384,25 +480,25 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
                       )}`
                 }
                 style={{ outline: "none", border: "none" }}
+                tabIndex={-1}
               />
             )}
           </div>
 
-          {/* Title */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <Typography variant="p" className="text-neutral-500 text-[15px]">
+          {/* Window Title */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[60%] truncate">
+            <Typography
+              variant="p"
+              className="text-neutral-500 text-[15px] truncate"
+            >
               {app.name}
             </Typography>
           </div>
         </div>
 
+        {/* Content Pane */}
         {!state.isMinimized && (
-          <div
-            className="h-full w-full bg-secondary"
-            style={{
-              maxHeight: `${state.windowSize.height - 37}px`,
-            }}
-          >
+          <div className="flex-1 w-full bg-secondary overflow-y-auto min-h-0">
             {isValidElement(children) && typeof children.type !== "string"
               ? React.cloneElement(children as ReactElement<WindowSizeProps>, {
                   windowSize: state.windowSize,
@@ -412,10 +508,10 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
           </div>
         )}
 
-        {/* Resize Handle */}
+        {/* Resize Corner Handle */}
         {isResizable && !state.isMaximized && (
           <div
-            className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize"
+            className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize z-10"
             style={{
               borderBottomRightRadius: "10px",
             }}
