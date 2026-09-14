@@ -80,15 +80,15 @@ const Avatar: React.FC<AvatarProps> = ({
         <img
           src={src as string}
           alt={alt}
-          className="object-cover"
+          className="w-full h-full object-cover"
           sizes={
             size === "sm"
               ? "32px"
               : size === "md"
-              ? "40px"
-              : size === "lg"
-              ? "48px"
-              : "64px"
+                ? "40px"
+                : size === "lg"
+                  ? "48px"
+                  : "64px"
           }
           onError={handleImgError}
         />
