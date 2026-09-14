@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "../utils/helpers";
-import fallbackLogo from "../assets/icon-192x192.svg";
+import fallbackLogo from "../assets/placeholder-logo.svg";
 
 type ImageSource = string | { src: string };
 
