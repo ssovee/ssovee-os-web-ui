@@ -11,7 +11,7 @@ export default defineConfig({
     ".gif": "dataurl",
     ".wav": "dataurl",
   },
-  external: ["react", "react-dom", "@phosphor-icons/react"],
+  external: ["react", "react-dom", "@phosphor-icons/react", "@tiptap/react", "@tiptap/starter-kit"],
   outDir: "dist",
   splitting: false,
   treeshake: true,
