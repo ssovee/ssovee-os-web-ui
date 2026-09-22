@@ -71,6 +71,7 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@phosphor-icons/react": ">=2",
+    "pdfjs-dist": "^6.3.289",
     "ua-parser-js": "^2.0.4"
   },
   "devDependencies": {

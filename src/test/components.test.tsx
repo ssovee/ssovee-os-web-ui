@@ -344,8 +344,6 @@ describe("component smoke tests", () => {
     );
 
     rerender(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
-    const pdfObject = document.querySelector('object[type="application/pdf"]');
-    expect(pdfObject).toHaveAttribute("aria-label", "document.pdf");
     expect(screen.getByRole("link", { name: /download document.pdf/i })).toHaveAttribute(
       "download",
       "document.pdf"
@@ -356,12 +354,17 @@ describe("component smoke tests", () => {
 
     rerender(<PreviewComponent fileName="config.json" base64={jsonBase64} />);
     expect(screen.getByText(/"name": "SSOVEE"/)).toBeInTheDocument();
+
+    rerender(<PreviewComponent fileName="report.docx" base64="ZG9j" />);
+    expect(screen.getByText(/preview is not available for report.docx/i)).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("shows a fallback for unsupported file types", () => {
+  it("shows a clear message for unsupported file types", () => {
     render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);
 
     expect(screen.getByText(/preview is not available for archive.zip/i)).toBeInTheDocument();
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
   it("renders a table structure", () => {

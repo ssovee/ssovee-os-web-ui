@@ -107,7 +107,7 @@ export function NoteEditor() {
 
 ### PreviewComponent
 
-`PreviewComponent` previews a file from base64 data supplied by the host application. Pass either raw base64 or a complete data URL along with the original file name. Image files, PDFs, text files, and JSON are supported.
+`PreviewComponent` previews a file from base64 data supplied by the host application. Pass either raw base64 or a complete data URL along with the original file name. Images, PDFs, text files, JSON, audio, and video use browser-native previews. Office and binary formats receive a download action because browsers cannot render them directly from base64 without a document parser.
 
 ```tsx
 import { PreviewComponent } from "ssovee-os-web-ui";
@@ -123,7 +123,7 @@ export function FilePreview({ fileName, base64 }: { fileName: string; base64: st
 }
 ```
 
-Supported image extensions include `avif`, `bmp`, `gif`, `jpg`, `jpeg`, `png`, `svg`, and `webp`. Supported text extensions include `css`, `csv`, `html`, `js`, `jsx`, `md`, `ts`, `tsx`, `txt`, `xml`, `yaml`, and `yml`.
+Supported image extensions include `avif`, `bmp`, `gif`, `heic`, `jpg`, `jpeg`, `png`, `svg`, `tif`, `tiff`, and `webp`. Supported text extensions include common `c`, `cpp`, `css`, `csv`, `env`, `html`, `java`, `js`, `jsx`, `md`, `php`, `py`, `rb`, `rs`, `sh`, `sql`, `ts`, `tsx`, `txt`, `xml`, `yaml`, and `yml` files. Audio and video include common `aac`, `flac`, `m4a`, `mp3`, `ogg`, `wav`, `avi`, `m4v`, `mkv`, `mov`, `mp4`, `mpeg`, `ogv`, `webm`, and `wmv` files. Office formats such as `doc`, `docx`, `xls`, `xlsx`, `ppt`, and `pptx`, plus archives such as `zip`, `7z`, and `rar`, are available to download.
 
 ## Window components
 
