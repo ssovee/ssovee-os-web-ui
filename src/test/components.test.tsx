@@ -333,7 +333,7 @@ describe("component smoke tests", () => {
     expect(screen.getByAltText(/avatar image/i)).toBeInTheDocument();
   });
 
-  it("previews image, PDF, text, and JSON files from base64", () => {
+  it("previews image, text, and JSON files from base64", () => {
     const textBase64 = btoa("hello from preview");
     const jsonBase64 = btoa('{"name":"SSOVEE","enabled":true}');
 
@@ -341,12 +341,6 @@ describe("component smoke tests", () => {
     expect(screen.getByRole("img", { name: "photo.png" })).toHaveAttribute(
       "src",
       "data:image/png;base64,aW1hZ2U="
-    );
-
-    rerender(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
-    expect(screen.getByRole("link", { name: /download document.pdf/i })).toHaveAttribute(
-      "download",
-      "document.pdf"
     );
 
     rerender(<PreviewComponent fileName="notes.txt" base64={textBase64} />);
@@ -360,6 +354,11 @@ describe("component smoke tests", () => {
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
+  it("renders the PDF viewer without a download link", () => {
+    render(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
+
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+  });
   it("shows a clear message for unsupported file types", () => {
     render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);
 

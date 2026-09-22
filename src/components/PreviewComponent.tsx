@@ -1,5 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
 import { cn } from "../utils/helpers";
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  "pdfjs-dist/build/pdf.worker.min.mjs",
+  import.meta.url
+).toString();
 
 export interface PreviewComponentProps {
   fileName: string;
@@ -88,49 +94,8 @@ const toPdfBytes = (base64: string) => {
 const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, className }) => {
   const previewType = getPreviewType(fileName);
   const dataUrl = toDataUrl(base64, fileName);
-  const pdfContainerRef = useRef<HTMLDivElement>(null);
-  const [pdfState, setPdfState] = useState<"loading" | "ready" | "error">("loading");
-
-  useEffect(() => {
-    if (previewType !== "pdf" || !pdfContainerRef.current) return;
-
-    let cancelled = false;
-    const container = pdfContainerRef.current;
-    setPdfState("loading");
-    container.replaceChildren();
-
-    import("pdfjs-dist/legacy/build/pdf.mjs")
-      .then(async ({ getDocument }) => {
-        const pdf = await getDocument({ data: toPdfBytes(base64) }).promise;
-
-        for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
-          if (cancelled) return;
-
-          const page = await pdf.getPage(pageNumber);
-          const viewport = page.getViewport({ scale: 1.35 });
-          const canvas = document.createElement("canvas");
-          const context = canvas.getContext("2d");
-          if (!context) throw new Error("Canvas is not supported");
-
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-          canvas.setAttribute("aria-label", `${fileName}, page ${pageNumber}`);
-          canvas.className = "mb-3 max-w-full shadow-sm";
-          container.appendChild(canvas);
-          await page.render({ canvas, canvasContext: context, viewport }).promise;
-        }
-
-        if (!cancelled) setPdfState("ready");
-      })
-      .catch(() => {
-        if (!cancelled) setPdfState("error");
-      });
-
-    return () => {
-      cancelled = true;
-      container.replaceChildren();
-    };
-  }, [base64, fileName, previewType]);
+  const [pageCount, setPageCount] = useState<number | null>(null);
+  const [pdfError, setPdfError] = useState(false);
 
   if (previewType === "image") {
     return (
@@ -143,12 +108,32 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
   if (previewType === "pdf") {
     return (
       <div className={cn("flex min-h-96 flex-col items-center overflow-auto p-3", className)}>
-        {pdfState === "loading" && <p>Loading {fileName}...</p>}
-        {pdfState === "error" && <p className="mb-3">Unable to render this PDF.</p>}
-        <div ref={pdfContainerRef} className="flex w-full flex-col items-center" />
-        <a href={dataUrl} download={fileName} className="mt-3">
-          Download {fileName}
-        </a>
+        {pdfError ? (
+          <p>Unable to render {fileName}. The PDF may be invalid or corrupted.</p>
+        ) : (
+          <Document
+            file={{ data: toPdfBytes(base64) }}
+            loading={<p>Loading {fileName}...</p>}
+            error={<p>Unable to render {fileName}. The PDF may be invalid or corrupted.</p>}
+            onLoadSuccess={({ numPages }) => {
+              setPageCount(numPages);
+              setPdfError(false);
+            }}
+            onLoadError={() => setPdfError(true)}
+            className="flex w-full flex-col items-center"
+          >
+            {pageCount !== null &&
+              Array.from({ length: pageCount }, (_, index) => (
+                <Page
+                  key={`${fileName}-${index + 1}`}
+                  pageNumber={index + 1}
+                  renderAnnotationLayer={false}
+                  renderTextLayer={false}
+                  className="mb-3 max-w-full shadow-sm"
+                />
+              ))}
+          </Document>
+        )}
       </div>
     );
   }
