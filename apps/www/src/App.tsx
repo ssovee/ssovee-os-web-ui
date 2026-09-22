@@ -19,6 +19,7 @@ import {
   Pagination,
   Progress,
   Radio,
+  RichEditor,
   SearchInput,
   Select,
   Table,
@@ -65,6 +66,7 @@ const COMPONENT_LIST: ComponentItem[] = [
   { id: 'button', name: 'Button' },
   { id: 'input', name: 'Input' },
   { id: 'textarea', name: 'TextArea' },
+  { id: 'rich-editor', name: 'RichEditor' },
   { id: 'json-editor', name: 'CodeEditor' },
   { id: 'select', name: 'Select' },
   { id: 'checkbox', name: 'Checkbox' },
@@ -126,6 +128,11 @@ const PROP_MATRIX: Record<string, PropRow[]> = {
     { prop: 'resize', type: 'none | vertical | horizontal | both', defaultValue: 'vertical', description: 'Resize behavior.' },
     { prop: 'label/helperText/error', type: 'string', defaultValue: 'undefined', description: 'Form metadata.' },
     { prop: 'fullWidth', type: 'boolean', defaultValue: 'false', description: 'Expands to container width.' },
+  ],
+  RichEditor: [
+    { prop: 'content', type: 'string', defaultValue: 'required', description: 'Initial HTML content for the editor.' },
+    { prop: 'onChange', type: '(content: string) => void', defaultValue: 'required', description: 'Receives the current HTML content.' },
+    { prop: 'isDarkTheme', type: 'boolean', defaultValue: 'undefined', description: 'Selects the dark editor surface and text colors.' },
   ],
   CodeEditor: [
     { prop: 'value/onChange', type: 'string / (value: string) => void', defaultValue: 'required', description: 'Controlled editor content and change callback.' },
@@ -368,6 +375,7 @@ function App() {
   })
   const [name, setName] = useState('Shivam')
   const [description, setDescription] = useState('A reusable design system component library.')
+  const [richEditorContent, setRichEditorContent] = useState('<h2>Welcome to the RichEditor</h2><p>Select text to try <strong>bold</strong>, <em>italic</em>, lists, quotes, and code formatting.</p>')
   const [jsonValue, setJsonValue] = useState(`{
   "name": "SSOVEE UI",
   "version": "0.1.70",
@@ -620,6 +628,27 @@ function App() {
           />
         </section>
 
+        <section id="rich-editor" className="docs-section">
+          <DemoShowcase
+            title="RichEditor"
+            description="A controlled TipTap editor with formatting, lists, quotes, code, undo, redo, and clear-formatting actions."
+            variants={[
+              {
+                label: 'CONTROLLED EDITOR',
+                preview: (
+                  <div className="preview-col full-row">
+                    <RichEditor content={richEditorContent} onChange={setRichEditorContent} isDarkTheme={theme === 'dark'} />
+                    <Typography variant="span" size="sm" color="neutral-300">
+                      HTML characters: {richEditorContent.length}
+                    </Typography>
+                  </div>
+                ),
+                code: '<RichEditor content={html} onChange={setHtml} />',
+              },
+            ]}
+          />
+        </section>
+
         <section id="json-editor" className="docs-section">
           <DemoShowcase
             title="CodeEditor"
@@ -632,7 +661,7 @@ function App() {
                     <CodeEditor
                       value={jsonValue}
                       onChange={setJsonValue}
-                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      isDarkTheme={theme === 'dark'}
                       height="280px"
                       className="demo-json-editor"
                       options={{ minimap: { enabled: false }, padding: { top: 12 } }}
