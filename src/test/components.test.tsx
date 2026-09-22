@@ -30,6 +30,7 @@ import Accordion from "../components/Accordion";
 import Tabs from "../components/Tabs";
 import Typography from "../components/Typography";
 import ImageWithPlaceholder from "../components/ImageWithPlaceholder";
+import PreviewComponent from "../components/PreviewComponent";
 import WindowWithSideMenu from "../components/WindowWithSideMenu";
 import WindowWithoutSideMenu from "../components/WindowWithoutSideMenu";
 import PluginPlayground from "../components/PluginPlayground";
@@ -330,6 +331,32 @@ describe("component smoke tests", () => {
   it("renders ImageWithPlaceholder", () => {
     render(<ImageWithPlaceholder alt="Avatar image" src="/avatar.png" />);
     expect(screen.getByAltText(/avatar image/i)).toBeInTheDocument();
+  });
+
+  it("previews image, PDF, text, and JSON files from base64", () => {
+    const textBase64 = btoa("hello from preview");
+    const jsonBase64 = btoa('{"name":"SSOVEE","enabled":true}');
+
+    const { rerender } = render(<PreviewComponent fileName="photo.png" base64="aW1hZ2U=" />);
+    expect(screen.getByRole("img", { name: "photo.png" })).toHaveAttribute(
+      "src",
+      "data:image/png;base64,aW1hZ2U="
+    );
+
+    rerender(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
+    expect(screen.getByTitle("document.pdf")).toHaveAttribute("src", "data:application/pdf;base64,cGRm");
+
+    rerender(<PreviewComponent fileName="notes.txt" base64={textBase64} />);
+    expect(screen.getByText("hello from preview")).toBeInTheDocument();
+
+    rerender(<PreviewComponent fileName="config.json" base64={jsonBase64} />);
+    expect(screen.getByText(/"name": "SSOVEE"/)).toBeInTheDocument();
+  });
+
+  it("shows a fallback for unsupported file types", () => {
+    render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);
+
+    expect(screen.getByText(/preview is not available for archive.zip/i)).toBeInTheDocument();
   });
 
   it("renders a table structure", () => {

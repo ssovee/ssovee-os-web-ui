@@ -84,6 +84,47 @@ Use `theme="vs-dark"` for a dark editor. The component also accepts Monaco `lang
 
 The component supports `toolbar`, `plugins`, `fullWidth`, `error`, and `disabled` props for common form usage.
 
+### RichEditor
+
+`RichEditor` is a controlled rich-text editor that returns the edited content as HTML. Set `isDarkTheme` when the surrounding app uses the dark theme:
+
+```tsx
+import { useState } from "react";
+import { RichEditor } from "ssovee-os-web-ui";
+
+export function NoteEditor() {
+  const [content, setContent] = useState("<p>Write a note...</p>");
+
+  return (
+    <RichEditor
+      content={content}
+      onChange={setContent}
+      isDarkTheme
+    />
+  );
+}
+```
+
+### PreviewComponent
+
+`PreviewComponent` previews a file from base64 data supplied by the host application. Pass either raw base64 or a complete data URL along with the original file name. Image files, PDFs, text files, and JSON are supported.
+
+```tsx
+import { PreviewComponent } from "ssovee-os-web-ui";
+
+export function FilePreview({ fileName, base64 }: { fileName: string; base64: string }) {
+  return (
+    <PreviewComponent
+      fileName={fileName}
+      base64={base64}
+      className="h-96"
+    />
+  );
+}
+```
+
+Supported image extensions include `avif`, `bmp`, `gif`, `jpg`, `jpeg`, `png`, `svg`, and `webp`. Supported text extensions include `css`, `csv`, `html`, `js`, `jsx`, `md`, `ts`, `tsx`, `txt`, `xml`, `yaml`, and `yml`.
+
 ## Window components
 
 ### Simple window
@@ -207,6 +248,8 @@ The package exports these components and types for external use:
 - `Input`
 - `TextArea`
 - `CodeEditor`
+- `RichEditor`
+- `PreviewComponent` (also available as `FilePreview`)
 - `Select`
 - `SelectOption`
 - `Checkbox`

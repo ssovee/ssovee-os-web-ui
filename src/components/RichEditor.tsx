@@ -43,7 +43,7 @@ const RichEditor = ({ content, onChange, isDarkTheme }: RichEditorProps) => {
 
   return (
     <>
-      <div className="mt-3 flex flex-wrap items-center gap-1 border-b border-primary pb-2 text-neutral-500 [&_button]:text-neutral-500">
+      <div className="mt-3 flex flex-wrap items-center gap-1 border-b border-primary pb-2">
         <div className="flex items-center gap-0.5">
           <Button type="button" variant={editor?.isActive("bold") ? "primary" : "ghost"} size="sm" onClick={() => editor?.chain().focus().toggleBold().run()} aria-label="Bold text" title="Bold"><strong>B</strong></Button>
           <Button type="button" variant={editor?.isActive("italic") ? "primary" : "ghost"} size="sm" onClick={() => editor?.chain().focus().toggleItalic().run()} aria-label="Italic text" title="Italic"><em>I</em></Button>
