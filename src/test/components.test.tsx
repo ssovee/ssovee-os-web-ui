@@ -357,10 +357,7 @@ describe("component smoke tests", () => {
   it("renders the PDF viewer without a download link", () => {
     render(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
 
-    expect(screen.getByTitle("document.pdf")).toHaveAttribute(
-      "src",
-      "data:application/pdf;base64,cGRm"
-    );
+    expect(screen.getByTitle("document.pdf")).toHaveAttribute("src", expect.stringMatching(/^blob:/));
   });
   it("shows a clear message for unsupported file types", () => {
     render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);
