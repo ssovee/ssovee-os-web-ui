@@ -17,8 +17,6 @@ export default defineConfig({
     "@phosphor-icons/react",
     "@tiptap/react",
     "@tiptap/starter-kit",
-    "react-pdf",
-    "pdfjs-dist",
   ],
   outDir: "dist",
   splitting: false,

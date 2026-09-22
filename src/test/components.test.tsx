@@ -357,7 +357,10 @@ describe("component smoke tests", () => {
   it("renders the PDF viewer without a download link", () => {
     render(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
 
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByTitle("document.pdf")).toHaveAttribute(
+      "src",
+      "data:application/pdf;base64,cGRm"
+    );
   });
   it("shows a clear message for unsupported file types", () => {
     render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);

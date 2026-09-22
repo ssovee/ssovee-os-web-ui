@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import { Document, Page, pdfjs } from "react-pdf";
+import React from "react";
 import { cn } from "../utils/helpers";
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString();
 
 export interface PreviewComponentProps {
   fileName: string;
@@ -86,16 +80,9 @@ const decodeBase64 = (base64: string) => {
   return new TextDecoder().decode(bytes);
 };
 
-const toPdfBytes = (base64: string) => {
-  const value = base64.includes(",") ? base64.slice(base64.indexOf(",") + 1) : base64;
-  return Uint8Array.from(atob(value), (character) => character.charCodeAt(0));
-};
-
 const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, className }) => {
   const previewType = getPreviewType(fileName);
   const dataUrl = toDataUrl(base64, fileName);
-  const [pageCount, setPageCount] = useState<number | null>(null);
-  const [pdfError, setPdfError] = useState(false);
 
   if (previewType === "image") {
     return (
@@ -106,36 +93,7 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
   }
 
   if (previewType === "pdf") {
-    return (
-      <div className={cn("flex min-h-96 flex-col items-center overflow-auto p-3", className)}>
-        {pdfError ? (
-          <p>Unable to render {fileName}. The PDF may be invalid or corrupted.</p>
-        ) : (
-          <Document
-            file={{ data: toPdfBytes(base64) }}
-            loading={<p>Loading {fileName}...</p>}
-            error={<p>Unable to render {fileName}. The PDF may be invalid or corrupted.</p>}
-            onLoadSuccess={({ numPages }) => {
-              setPageCount(numPages);
-              setPdfError(false);
-            }}
-            onLoadError={() => setPdfError(true)}
-            className="flex w-full flex-col items-center"
-          >
-            {pageCount !== null &&
-              Array.from({ length: pageCount }, (_, index) => (
-                <Page
-                  key={`${fileName}-${index + 1}`}
-                  pageNumber={index + 1}
-                  renderAnnotationLayer={false}
-                  renderTextLayer={false}
-                  className="mb-3 max-w-full shadow-sm"
-                />
-              ))}
-          </Document>
-        )}
-      </div>
-    );
+    return <iframe title={fileName} src={dataUrl} className={cn("h-full min-h-96 w-full border-0", className)} />;
   }
 
   if (previewType === "audio") {
