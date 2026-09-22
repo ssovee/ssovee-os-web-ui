@@ -344,7 +344,12 @@ describe("component smoke tests", () => {
     );
 
     rerender(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
-    expect(screen.getByTitle("document.pdf")).toHaveAttribute("src", "data:application/pdf;base64,cGRm");
+    const pdfObject = document.querySelector('object[type="application/pdf"]');
+    expect(pdfObject).toHaveAttribute("aria-label", "document.pdf");
+    expect(screen.getByRole("link", { name: /download document.pdf/i })).toHaveAttribute(
+      "download",
+      "document.pdf"
+    );
 
     rerender(<PreviewComponent fileName="notes.txt" base64={textBase64} />);
     expect(screen.getByText("hello from preview")).toBeInTheDocument();

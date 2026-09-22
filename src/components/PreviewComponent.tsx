@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { cn } from "../utils/helpers";
 
 export interface PreviewComponentProps {
@@ -48,9 +48,28 @@ const decodeBase64 = (base64: string) => {
   return new TextDecoder().decode(bytes);
 };
 
+const toPdfBlob = (base64: string) => {
+  const value = base64.includes(",") ? base64.slice(base64.indexOf(",") + 1) : base64;
+  const bytes = Uint8Array.from(atob(value), (character) => character.charCodeAt(0));
+  return new Blob([bytes], { type: "application/pdf" });
+};
+
 const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, className }) => {
   const previewType = getPreviewType(fileName);
   const dataUrl = toDataUrl(base64, fileName);
+  const [pdfUrl, setPdfUrl] = useState(dataUrl);
+
+  useEffect(() => {
+    if (previewType !== "pdf" || typeof URL.createObjectURL !== "function") return;
+
+    try {
+      const objectUrl = URL.createObjectURL(toPdfBlob(base64));
+      setPdfUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    } catch {
+      setPdfUrl(dataUrl);
+    }
+  }, [base64, dataUrl, previewType]);
 
   if (previewType === "image") {
     return (
@@ -61,7 +80,13 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
   }
 
   if (previewType === "pdf") {
-    return <iframe title={fileName} src={dataUrl} className={cn("h-full min-h-96 w-full border-0", className)} />;
+    return (
+      <object data={pdfUrl} type="application/pdf" aria-label={fileName} className={cn("h-full min-h-96 w-full", className)}>
+        <a href={pdfUrl} download={fileName}>
+          Download {fileName}
+        </a>
+      </object>
+    );
   }
 
   if (previewType === "text" || previewType === "json") {
