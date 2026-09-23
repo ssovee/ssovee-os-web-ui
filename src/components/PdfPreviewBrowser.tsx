@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
@@ -27,17 +27,20 @@ const PdfPreviewBrowser: React.FC<PdfPreviewProps> = ({ base64, fileName, classN
     return () => window.removeEventListener("resize", updatePageWidth);
   }, []);
 
-  let pdfData: Uint8Array;
-  try {
-    pdfData = base64ToUint8Array(base64);
-  } catch {
-    pdfData = new Uint8Array();
-  }
+  const pdfFile = useMemo(() => {
+    let pdfData: Uint8Array;
+    try {
+      pdfData = base64ToUint8Array(base64);
+    } catch {
+      pdfData = new Uint8Array();
+    }
+    return { data: pdfData };
+  }, [base64]);
 
   return (
     <div className={cn("h-full min-h-96 w-full overflow-auto bg-muted/30", className)}>
       <Document
-        file={{ data: pdfData }}
+        file={pdfFile}
         suspense={false}
         onLoadSuccess={({ numPages: loadedPages }) => {
           setNumPages(loadedPages);
