@@ -61,6 +61,7 @@ export function Example() {
 
 `CodeEditor` is a controlled Monaco editor configured for JSON by default:
 
+{% raw %}
 ```tsx
 import { useState } from "react";
 import { CodeEditor } from "ssovee-os-web-ui";
@@ -79,6 +80,7 @@ export function SettingsEditor() {
   );
 }
 ```
+{% endraw %}
 
 Use `theme="vs-dark"` for a dark editor. The component also accepts Monaco `language`, `height`, and `options` props.
 
