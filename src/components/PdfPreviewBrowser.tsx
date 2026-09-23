@@ -38,6 +38,7 @@ const PdfPreviewBrowser: React.FC<PdfPreviewProps> = ({ base64, fileName, classN
     <div className={cn("h-full min-h-96 w-full overflow-auto bg-muted/30", className)}>
       <Document
         file={{ data: pdfData }}
+        suspense={false}
         onLoadSuccess={({ numPages: loadedPages }) => {
           setNumPages(loadedPages);
           setError(undefined);
