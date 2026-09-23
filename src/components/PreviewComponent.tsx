@@ -1,5 +1,6 @@
 import React from "react";
 import { cn } from "../utils/helpers";
+import OfficePreview from "./OfficePreview";
 import PdfPreview from "./PdfPreview";
 
 export interface PreviewComponentProps {
@@ -8,15 +9,17 @@ export interface PreviewComponentProps {
   className?: string;
 }
 
-type PreviewType = "image" | "pdf" | "text" | "json" | "audio" | "video" | "unsupported";
+type PreviewType = "image" | "pdf" | "office" | "text" | "json" | "audio" | "video" | "unsupported";
 
 const imageExtensions = /\.(avif|bmp|gif|heic|jpe?g|png|svg|tiff?|webp)$/i;
 const textExtensions = /\.(c|cc|conf|cpp|css|csv|env|h|hpp|html?|ini|java|js|jsx|log|md|mjs|php|py|rb|rs|sh|sql|swift|ts|tsx|txt|xml|yaml|yml)$/i;
 const audioExtensions = /\.(aac|flac|m4a|mp3|ogg|wav|weba)$/i;
 const videoExtensions = /\.(avi|m4v|mkv|mov|mp4|mpeg|ogv|webm|wmv)$/i;
+const officeExtensions = /\.(doc|docx|xls|xlsx|ppt|pptx)$/i;
 
 const getPreviewType = (fileName: string): PreviewType => {
   if (/\.pdf$/i.test(fileName)) return "pdf";
+  if (officeExtensions.test(fileName)) return "office";
   if (/\.json$/i.test(fileName)) return "json";
   if (imageExtensions.test(fileName)) return "image";
   if (audioExtensions.test(fileName)) return "audio";
@@ -97,6 +100,10 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
     return <PdfPreview base64={base64} fileName={fileName} className={className} />;
   }
 
+  if (previewType === "office") {
+    return <OfficePreview base64={base64} fileName={fileName} className={className} />;
+  }
+
   if (previewType === "audio") {
     return <audio controls src={dataUrl} className={cn("w-full", className)} />;
   }
@@ -117,7 +124,7 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
     }
 
     return (
-      <pre className={cn("h-full min-h-48 w-full overflow-auto whitespace-pre-wrap break-words p-4 text-left", className)}>
+      <pre className={cn("h-full min-h-48 w-full overflow-auto whitespace-pre-wrap wrap-break-word p-4 text-left", className)}>
         <code>{content}</code>
       </pre>
     );

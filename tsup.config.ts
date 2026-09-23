@@ -3,6 +3,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   entry: ["src/index.ts", "src/sdk.ts"],
   format: ["esm", "cjs"],
+  platform: "browser",
   dts: true,
   clean: true,
   sourcemap: true,
@@ -18,6 +19,7 @@ export default defineConfig({
     "@tiptap/react",
     "@tiptap/starter-kit",
   ],
+  noExternal: ["officeparser", "react-pdf", "pdfjs-dist"],
   outDir: "dist",
   splitting: false,
   treeshake: true,

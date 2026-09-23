@@ -49,7 +49,7 @@
     "tailwind.config.js"
   ],
   "scripts": {
-    "build": "tsup && npm run build:css",
+    "build": "tsup && node scripts/copy-pdf-worker.mjs && npm run build:css",
     "build:css": "tailwindcss -i ./src/theme.css -o ./dist/index.css",
     "dev:www": "npm --prefix apps/www run dev",
     "build:www": "npm --prefix apps/www run build",
@@ -71,8 +71,6 @@
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@phosphor-icons/react": ">=2",
-    "pdfjs-dist": "^6.3.289",
-    "react-pdf": "^11.0.0",
     "ua-parser-js": "^2.0.4"
   },
   "devDependencies": {
@@ -80,12 +78,15 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
+    "officeparser": "^8.0.0",
     "@tiptap/react": "^3.31.3",
     "@tiptap/starter-kit": "^3.31.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/ua-parser-js": "^0.7.39",
     "jsdom": "^29.1.1",
+    "pdfjs-dist": "^6.3.289",
+    "react-pdf": "^11.0.0",
     "tailwindcss": "^4.1.11",
     "tsup": "^8.3.3",
     "typescript": "^5.7.2",

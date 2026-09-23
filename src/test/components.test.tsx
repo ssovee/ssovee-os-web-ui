@@ -350,8 +350,7 @@ describe("component smoke tests", () => {
     expect(screen.getByText(/"name": "SSOVEE"/)).toBeInTheDocument();
 
     rerender(<PreviewComponent fileName="report.docx" base64="ZG9j" />);
-    expect(screen.getByText(/preview is not available for report.docx/i)).toBeInTheDocument();
-    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /download report.docx/i })).not.toBeInTheDocument();
   });
 
   it("renders the PDF preview with PDF.js instead of an iframe", () => {
