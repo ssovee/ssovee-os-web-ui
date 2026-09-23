@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { cn } from "../utils/helpers";
+import PdfPreview from "./PdfPreview";
 
 export interface PreviewComponentProps {
   fileName: string;
@@ -80,28 +81,9 @@ const decodeBase64 = (base64: string) => {
   return new TextDecoder().decode(bytes);
 };
 
-const toBlobUrl = (base64: string, fileName: string) => {
-  const value = base64.includes(",") ? base64.slice(base64.indexOf(",") + 1) : base64;
-  const bytes = Uint8Array.from(atob(value), (character) => character.charCodeAt(0));
-  return URL.createObjectURL(new Blob([bytes], { type: getMimeType(fileName) }));
-};
-
 const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, className }) => {
   const previewType = getPreviewType(fileName);
   const dataUrl = toDataUrl(base64, fileName);
-  const [pdfUrl, setPdfUrl] = useState<string>();
-
-  useEffect(() => {
-    if (previewType !== "pdf") {
-      setPdfUrl(undefined);
-      return;
-    }
-
-    const objectUrl = toBlobUrl(base64, fileName);
-    setPdfUrl(objectUrl);
-
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [base64, fileName, previewType]);
 
   if (previewType === "image") {
     return (
@@ -112,9 +94,7 @@ const PreviewComponent: React.FC<PreviewComponentProps> = ({ fileName, base64, c
   }
 
   if (previewType === "pdf") {
-    return pdfUrl ? (
-      <iframe title={fileName} src={pdfUrl} className={cn("h-full min-h-96 w-full border-0", className)} />
-    ) : null;
+    return <PdfPreview base64={base64} fileName={fileName} className={className} />;
   }
 
   if (previewType === "audio") {

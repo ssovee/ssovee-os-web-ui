@@ -354,10 +354,10 @@ describe("component smoke tests", () => {
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
-  it("renders the PDF viewer without a download link", () => {
+  it("renders the PDF preview with PDF.js instead of an iframe", () => {
     render(<PreviewComponent fileName="document.pdf" base64="cGRm" />);
 
-    expect(screen.getByTitle("document.pdf")).toHaveAttribute("src", expect.stringMatching(/^blob:/));
+    expect(screen.queryByTitle("document.pdf")).not.toBeInTheDocument();
   });
   it("shows a clear message for unsupported file types", () => {
     render(<PreviewComponent fileName="archive.zip" base64="dGVzdA==" />);
