@@ -1,7 +1,13 @@
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ["src/index.ts", "src/sdk.ts"],
+  entry: [
+    "src/index.ts",
+    "src/sdk.ts",
+    "src/components/*.tsx",
+    "src/hooks/*.ts",
+    "src/hooks/*.tsx",
+  ],
   format: ["esm", "cjs"],
   platform: "browser",
   dts: true,

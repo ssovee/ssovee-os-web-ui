@@ -55,6 +55,17 @@ export function Example() {
 }
 ```
 
+You can also import individual components or hooks from their subpaths:
+
+```tsx
+import Input from "ssovee-os-web-ui/components/Input";
+import Toast from "ssovee-os-web-ui/components/Toast";
+import { useSound } from "ssovee-os-web-ui/hooks/useSound";
+```
+
+Both import styles are supported; use the root entry for named imports or the
+component and hook subpaths to import modules individually.
+
 ## Editors
 
 ### CodeEditor

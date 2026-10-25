@@ -35,6 +35,16 @@
       "import": "./dist/sdk.js",
       "require": "./dist/sdk.cjs"
     },
+    "./components/*": {
+      "types": "./dist/components/*.d.ts",
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.cjs"
+    },
+    "./hooks/*": {
+      "types": "./dist/hooks/*.d.ts",
+      "import": "./dist/hooks/*.js",
+      "require": "./dist/hooks/*.cjs"
+    },
     "./tailwind-preset": "./tailwind-preset.js",
     "./tailwind.config.js": "./tailwind.config.js",
     "./theme.css": "./dist/index.css",
