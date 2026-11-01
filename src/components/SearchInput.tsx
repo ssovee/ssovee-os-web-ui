@@ -110,7 +110,7 @@ const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
 
     const variantClasses = {
       default: "bg-primary input-text-default border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50 placeholder-light placeholder-default",
-      filled: "bg-surface-4 input-text-filled border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50 placeholder-light placeholder-filled",
+      filled: "bg-surface-4 input-text-filled focus:ring-1 focus:ring-brand-color/50 placeholder-light placeholder-filled",
       outline: "bg-transparent input-text-outline border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50 placeholder-light placeholder-outline",
     };
 
