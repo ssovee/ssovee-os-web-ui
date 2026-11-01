@@ -43,7 +43,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
     
     const variantClasses = {
       default: "bg-primary border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
-      filled: "bg-surface-4 border border-surface-4 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
+      filled: "bg-surface-4 focus:ring-1 focus:ring-brand-color/50",
       outline: "bg-transparent border border-surface-1 focus:border-brand-color focus:ring-1 focus:ring-brand-color/50",
     };
 
@@ -76,7 +76,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
               sizeClasses[size],
               widthClasses,
               "pr-10 text-neutral-900 bg-white placeholder:text-neutral-900 dark:text-white dark:bg-slate-900 dark:placeholder:text-white",
-              error && "border-red-500 focus:border-red-500 focus:ring-red-500/50",
+              error && "border border-red-500 focus:border-red-500 focus:ring-red-500/50",
               className
             )}
             value={value}
