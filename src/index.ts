@@ -38,6 +38,7 @@ export * from "./components/Table";
 export { default as useGridClasses } from "./hooks/useGridClasses";
 export { default as useShortcutFormatter } from "./hooks/useShortcutFormatter";
 export { useDeviceSupport } from "./hooks/useDeviceSupport";
+export { useCopy } from "./hooks/useCopy";
 export { useSound } from "./hooks/useSound";
 export { getFormattedDate } from "./hooks/getFormattedDate";
 
