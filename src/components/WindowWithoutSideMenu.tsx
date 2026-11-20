@@ -11,6 +11,8 @@ import useShortcutFormatter from "../hooks/useShortcutFormatter";
 import { AppInterface } from "@/types/appsList";
 import { globalKeyboardShortcuts } from "../utils/constants";
 
+const TOP_BAR_HEIGHT = 37;
+
 export interface WindowSizeProps {
   windowSize: { width: number; height: number };
   isAppWindowResizing: boolean;
@@ -204,7 +206,10 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
         type: "DRAG",
         payload: {
           x: e.clientX - pendingSplitDrag.offsetX,
-          y: Math.max(37, e.clientY - pendingSplitDrag.offsetY),
+          y: Math.max(
+            TOP_BAR_HEIGHT,
+            e.clientY - pendingSplitDrag.offsetY,
+          ),
         },
       });
       setPendingSplitDrag(null);
@@ -220,8 +225,11 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
         Math.min(newX, window.innerWidth - state.windowSize.width),
       );
       const boundedY = Math.max(
-        0,
-        Math.min(newY, window.innerHeight - state.windowSize.height),
+        TOP_BAR_HEIGHT,
+        Math.min(
+          newY,
+          Math.max(TOP_BAR_HEIGHT, window.innerHeight - state.windowSize.height),
+        ),
       );
 
       dispatch({ type: "DRAG", payload: { x: boundedX, y: boundedY } });
