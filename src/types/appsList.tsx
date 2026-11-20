@@ -18,6 +18,17 @@ export interface AppInterface {
     windowSize: { width: number; height: number };
     isAppWindowResizing?: boolean;
   };
+  splitBounds?: {
+    left: string;
+    top: string;
+    width: string;
+    height: string;
+  } | null;
+  onWindowDrag?: (event: {
+    type: "move" | "drop" | "restore";
+    clientX: number;
+    clientY: number;
+  }) => void;
   metadata?: Partial<AppMetadata>;
   callback?: (value: "CLOSE_APP" | "CLICKED" | "MINIMIZE_APP") => void;
 }

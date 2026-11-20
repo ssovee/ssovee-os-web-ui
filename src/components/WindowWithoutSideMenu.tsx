@@ -2,6 +2,7 @@ import React, {
   useReducer,
   useEffect,
   useRef,
+  useState,
   isValidElement,
   ReactElement,
 } from "react";
@@ -142,6 +143,12 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   });
 
   const windowRef = useRef<HTMLDivElement>(null);
+  const [pendingSplitDrag, setPendingSplitDrag] = useState<{
+    startX: number;
+    startY: number;
+    offsetX: number;
+    offsetY: number;
+  } | null>(null);
 
   // Sync local minimize state from the app model passed from the parent
   useEffect(() => {
@@ -153,6 +160,17 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   // Drag logic
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (state.isMaximized) return;
+    if (app.splitBounds && windowRef.current) {
+      e.preventDefault();
+      const bounds = windowRef.current.getBoundingClientRect();
+      setPendingSplitDrag({
+        startX: e.clientX,
+        startY: e.clientY,
+        offsetX: e.clientX - bounds.left,
+        offsetY: e.clientY - bounds.top,
+      });
+      return;
+    }
     dispatch({
       type: "START_DRAG",
       payload: {
@@ -163,6 +181,36 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   };
 
   const handleMouseMove = (e: MouseEvent) => {
+    if (pendingSplitDrag) {
+      if (
+        Math.hypot(
+          e.clientX - pendingSplitDrag.startX,
+          e.clientY - pendingSplitDrag.startY,
+        ) < 4
+      ) {
+        return;
+      }
+
+      app.onWindowDrag?.({
+        type: "restore",
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
+      dispatch({
+        type: "START_DRAG",
+        payload: { x: pendingSplitDrag.offsetX, y: pendingSplitDrag.offsetY },
+      });
+      dispatch({
+        type: "DRAG",
+        payload: {
+          x: e.clientX - pendingSplitDrag.offsetX,
+          y: Math.max(37, e.clientY - pendingSplitDrag.offsetY),
+        },
+      });
+      setPendingSplitDrag(null);
+      return;
+    }
+
     if (state.isDragging) {
       const newX = e.clientX - state.startPosition.x;
       const newY = e.clientY - state.startPosition.y;
@@ -177,6 +225,11 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
       );
 
       dispatch({ type: "DRAG", payload: { x: boundedX, y: boundedY } });
+      app.onWindowDrag?.({
+        type: "move",
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
     }
 
     if (
@@ -210,7 +263,15 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e: MouseEvent) => {
+    if (pendingSplitDrag) setPendingSplitDrag(null);
+    if (state.isDragging) {
+      app.onWindowDrag?.({
+        type: "drop",
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
+    }
     if (state.isDragging) dispatch({ type: "STOP_DRAG" });
     if (state.resizeStart) dispatch({ type: "STOP_RESIZE" });
   };
@@ -226,7 +287,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   };
 
   useEffect(() => {
-    if (state.isDragging || state.resizeStart) {
+    if (state.isDragging || state.resizeStart || pendingSplitDrag) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
     }
@@ -237,7 +298,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
       // Restore user-select after resizing
       document.body.style.userSelect = "";
     };
-  }, [state.isDragging, state.resizeStart]);
+  }, [state.isDragging, state.resizeStart, pendingSplitDrag]);
 
   useEffect(() => {
     if (windowRef.current) {
@@ -306,23 +367,37 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
       ref={windowRef}
       className="window-drop-shadow  rounded-[10px]"
       style={{
-        width: `${state.windowSize.width}px`,
-        height: `${state.windowSize.height}px`,
-        transform: state.isMaximized
-          ? undefined
-          : `translate(${state.position.x}px, ${state.position.y - 37}px)`,
+        ...(app.splitBounds
+          ? {
+              position: "fixed" as const,
+              left: app.splitBounds.left,
+              top: app.splitBounds.top,
+              width: app.splitBounds.width,
+              height: app.splitBounds.height,
+              transform: "none",
+              minWidth: 0,
+              minHeight: 0,
+              borderRadius: 0,
+            }
+          : {
+              width: `${state.windowSize.width}px`,
+              height: `${state.windowSize.height}px`,
+              transform: state.isMaximized
+                ? undefined
+                : `translate(${state.position.x}px, ${state.position.y - 37}px)`,
+              position: "absolute" as const,
+              minWidth: `${state.defaultSize.width}px`,
+              minHeight: `${state.defaultSize.height}px`,
+            }),
         overflow: state.isMinimized ? "hidden" : "auto",
-        position: "absolute",
-        minWidth: `${state.defaultSize.width}px`,
-        minHeight: `${state.defaultSize.height}px`,
         zIndex: state.isDragging ? 3 : app?.isActive ? 2 : 1,
       }}
     >
       <div
         className="mx-auto overflow-hidden h-full w-full"
         style={{
-          minWidth: `${state.defaultSize.width}px`,
-          minHeight: `${state.defaultSize.height}px`,
+          minWidth: app.splitBounds ? 0 : `${state.defaultSize.width}px`,
+          minHeight: app.splitBounds ? 0 : `${state.defaultSize.height}px`,
           position: "relative",
         }}
       >
@@ -413,7 +488,7 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
         )}
 
         {/* Resize Handle */}
-        {isResizable && !state.isMaximized && (
+        {isResizable && !state.isMaximized && !app.splitBounds && (
           <div
             className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize"
             style={{
