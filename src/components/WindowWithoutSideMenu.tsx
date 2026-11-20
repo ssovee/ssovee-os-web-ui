@@ -306,7 +306,13 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
       // Restore user-select after resizing
       document.body.style.userSelect = "";
     };
-  }, [state.isDragging, state.resizeStart, pendingSplitDrag]);
+  }, [
+    app.onWindowDrag,
+    app.splitBounds,
+    state.isDragging,
+    state.resizeStart,
+    pendingSplitDrag,
+  ]);
 
   useEffect(() => {
     if (windowRef.current) {

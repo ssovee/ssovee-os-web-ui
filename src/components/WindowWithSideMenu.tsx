@@ -325,7 +325,13 @@ const WindowWithSideMenu: React.FC<WindowWithSideMenuProps> = ({
       window.removeEventListener("mouseup", handleMouseUp);
       document.body.style.userSelect = "";
     };
-  }, [state.isDragging, state.resizeStart, pendingSplitDrag]);
+  }, [
+    app.onWindowDrag,
+    app.splitBounds,
+    state.isDragging,
+    state.resizeStart,
+    pendingSplitDrag,
+  ]);
 
   useEffect(() => {
     if (windowRef.current) {
