@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useLayoutEffect,
   isValidElement,
   ReactElement,
 } from "react";
@@ -145,12 +146,39 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
   });
 
   const windowRef = useRef<HTMLDivElement>(null);
+  const [measuredWindowSize, setMeasuredWindowSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
   const [pendingSplitDrag, setPendingSplitDrag] = useState<{
     startX: number;
     startY: number;
     offsetX: number;
     offsetY: number;
   } | null>(null);
+  const contentWindowSize =
+    app.splitBounds && measuredWindowSize
+      ? measuredWindowSize
+      : state.windowSize;
+
+  useLayoutEffect(() => {
+    const windowElement = windowRef.current;
+    if (!windowElement || !app.splitBounds) return;
+
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const width = Math.round(entry.contentRect.width);
+      const height = Math.round(entry.contentRect.height);
+      if (width <= 0 || height <= 0) return;
+      setMeasuredWindowSize((current) =>
+        current?.width === width && current.height === height
+          ? current
+          : { width, height },
+      );
+    });
+    observer.observe(windowElement);
+    return () => observer.disconnect();
+  }, [app.splitBounds]);
 
   // Sync local minimize state from the app model passed from the parent
   useEffect(() => {
@@ -489,12 +517,12 @@ const WindowWithoutSideMenu: React.FC<WindowWithoutSideMenuProps> = ({
           <div
             className="h-full w-full bg-secondary"
             style={{
-              maxHeight: `${state.windowSize.height - 37}px`,
+              maxHeight: `${contentWindowSize.height - 37}px`,
             }}
           >
             {isValidElement(children) && typeof children.type !== "string"
               ? React.cloneElement(children as ReactElement<WindowSizeProps>, {
-                  windowSize: state.windowSize,
+                  windowSize: contentWindowSize,
                   isAppWindowResizing: state.resizeStart !== null,
                 })
               : children}
